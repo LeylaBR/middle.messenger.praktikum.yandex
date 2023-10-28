@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "npm run build && npm run dev",
+    "server": "npm run build && node server.cjs",
     "build": "vite build",
     "preview": "vite preview"
   },

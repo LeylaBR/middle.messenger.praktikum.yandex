@@ -10,6 +10,7 @@ export default {
         }),
     ],
     build: {
+        outDir: resolve(__dirname, 'dist'),
         rollupOptions: {
             input: {
                 index: resolve(__dirname, 'index.html'),
@@ -18,7 +19,11 @@ export default {
                 settingsPage: resolve(__dirname, 'src/pages/settingsPage/settingsPage.html'),
                 notFound: resolve(__dirname, 'src/pages/404Page/404Page.html'),
                 serverError: resolve(__dirname, 'src/pages/500Page/500Page.html'),
-            }
+            },
         }
+    },
+    server: {
+        port: 3000,
+        open: true,
     },
 }

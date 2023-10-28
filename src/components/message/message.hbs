@@ -1,10 +1,12 @@
-{{#if left}}<div class="messageContainer">{{/if}}
-{{#if right}}<div class="messageContainer messageContainerRight">{{/if}}
-    {{#if left}}
+{{#if left}}
+    <div class="messageContainer">{{/if}}
+{{#if right}}
+    <div class="messageContainer messageContainerRight">{{/if}}
+{{#if left}}
         <div class="imageUser">
             <img src="/noAvatar.jpg">
         </div>
-    {{/if}}
+{{/if}}
     <div>
         {{#if left}}
             <div class="nameUser">{{name}}</div>
@@ -14,10 +16,14 @@
             <div class="messageTime">{{time}}</div>
         </div>
     </div>
-    {{#if right}}
+{{#if right}}
         <div class="imageUser">
             <img src="/noAvatar.jpg">
         </div>
-    {{/if}}
-</div>
-{{#if left}}</div>{{/if}}
+{{/if}}
+{{#if left}}
+    </div>
+{{/if}}
+{{#if right}}
+    </div>
+{{/if}}
