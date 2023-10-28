@@ -1,0 +1,18 @@
+.usersContainer {
+  display: flex;
+  gap: 1rem;
+  padding: 5px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+
+.infoMessage {
+  font-size: 12px;
+  color: #7F91A4;
+}

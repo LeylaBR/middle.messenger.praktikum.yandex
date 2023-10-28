@@ -1,0 +1,17 @@
+{{#> layouts/layout title="Registration Page"}}
+    <div class="page">
+        <h3 class="title">Регистрация</h3>
+        <div class="inputs">
+            {{> input/input class="input" type="email" placeholder="Email" name="email" }}
+            {{> input/input class="input" type="text" placeholder="Имя" name="first_name"}}
+            {{> input/input class="input" type="text" placeholder="Фамилия" name="second_name"}}
+            {{> input/input class="input" type="text" placeholder="Login" name="login"}}
+            {{> input/input class="input" type="tel" placeholder="Tелефон" name="phone"}}
+            {{> input/input class="input" type="password" placeholder="Пароль" name="password"}}
+        </div>
+        <div class="buttons">
+            {{> button/button href="/src/pages/chatWindow/chatWindow.html" label="Registration" }}
+            {{> button/button  href="/" label="Login" }}
+        </div>
+    </div>
+{{/ layouts/layout}}

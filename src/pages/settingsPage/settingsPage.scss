@@ -1,0 +1,12 @@
+.avatarSettings {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.inputFile {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
+

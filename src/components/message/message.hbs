@@ -1,0 +1,23 @@
+{{#if left}}<div class="messageContainer">{{/if}}
+{{#if right}}<div class="messageContainer messageContainerRight">{{/if}}
+    {{#if left}}
+        <div class="imageUser">
+            <img src="/noAvatar.jpg">
+        </div>
+    {{/if}}
+    <div>
+        {{#if left}}
+            <div class="nameUser">{{name}}</div>
+        {{/if}}
+        <div class="{{class}}">
+            <div class="messageText">{{text}}</div>
+            <div class="messageTime">{{time}}</div>
+        </div>
+    </div>
+    {{#if right}}
+        <div class="imageUser">
+            <img src="/noAvatar.jpg">
+        </div>
+    {{/if}}
+</div>
+{{#if left}}</div>{{/if}}

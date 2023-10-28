@@ -1,0 +1,30 @@
+{{#> layouts/layout title="Settings Page"}}
+    <div class="page">
+        <h3 class="title">Настройка профиля</h3>
+        <div class="avatarSettings">
+            <div class="imageUser">
+                <img src="/noAvatar.jpg">
+            </div>
+            <div class="input__wrapper">
+                <input name="avatar" type="file" class="inputFile">
+                <label class="button">
+                    <span>Выберите файл</span>
+                </label>
+            </div>
+        </div>
+        <div class="inputs">
+            {{> input/input class="input" type="email" value="test@yandex.ru" placeholder="Email" name="email" }}
+            {{> input/input class="input" type="text" value="Test" placeholder="Имя" name="first_name"}}
+            {{> input/input class="input" type="text" value="Testovich" placeholder="Фамилия" name="second_name"}}
+            {{> input/input class="input" type="text" value="test@yandex.ru" placeholder="Login" name="login"}}
+            {{> input/input class="input" type="tel" value="+79995558832" placeholder="Tелефон" name="phone"}}
+            {{> input/input class="input" type="text" value="TestRock" placeholder="Имя в чате" name="display_name"}}
+            {{> input/input class="input" type="password" value="5591hgj788" placeholder="Пароль" name="oldPassword"}}
+            {{> input/input class="input" type="password"  placeholder="Новый пароль" name="newPassword"}}
+        </div>
+        <div class="buttons">
+            {{> button/button href="/src/pages/chatWindow/chatWindow.html"label="Cancel" }}
+            {{> button/button href="/src/pages/chatWindow/chatWindow.html" label="Save" }}
+        </div>
+    </div>
+{{/ layouts/layout}}

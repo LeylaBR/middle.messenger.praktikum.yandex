@@ -1,0 +1,31 @@
+.messageContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.messageContainerRight {
+  justify-content: end;
+}
+
+.massageLeft, .massageRight {
+  width: fit-content;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  align-items: end;
+}
+
+.massageLeft {
+  background-color: #17212B;
+}
+
+.massageRight {
+  background-color: #2B5279;
+}
+
+.messageTime {
+  color: #7F91A4;
+  font-size: 12px;
+}

@@ -1,0 +1,35 @@
+{{#> layouts/layout title="Chat Page"}}
+    <div class="pageChat">
+        <div class="usersBlock">
+            <div class="usersHeader">
+                <div class="profileSettings">
+                    {{> button/button href="/src/pages/settingsPage/settingsPage.html" type="link" label="Профиль" }}
+                    <a href="/src/pages/settingsPage/settingsPage.html"><img src="/cogwheelIcon.svg"/></a>
+                </div>
+                <div class="chaSearch">
+                    {{> input/input class="inputSearch" type="text" placeholder="Поиск" }}
+                </div>
+            </div>
+            <div class="usersList">
+                {{> userItem/userItem name="Bob" info="Hello"}}
+                {{> userItem/userItem name="Jim" info="Hi"}}
+            </div>
+        </div>
+        <div class="messageBlock">
+            <div class="messageHeader">
+                <div class="chatName">Рабочий чат</div>
+                <div class="counterUsers">5</div>
+            </div>
+            <div class="messageLine">
+                <div class="messageDate">26 октября</div>
+                {{> message/message class="massageLeft" left="true" name="Bob" text="Hi! How are you?" time="12:30"}}
+                {{> message/message class="massageRight" right="true" text="Hello. I'm fine. How are you?" time="12:32"}}
+            </div>
+            <div class="messageInput">
+                <img src="/clipIcon.svg">
+                {{> input/input class="inputMessage" type="text" name="message" placeholder="Введите сообщение" }}
+                {{> button/button label="Отправить" }}
+            </div>
+        </div>
+    </div>
+{{/ layouts/layout}}

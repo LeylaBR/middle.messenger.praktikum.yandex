@@ -1,0 +1,29 @@
+html body {
+  color: white;
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%;
+  font-size: 14px;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.42;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+  margin: 0;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+}
