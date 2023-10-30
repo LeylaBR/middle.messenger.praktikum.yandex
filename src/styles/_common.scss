@@ -1,16 +1,18 @@
+@import '/src/styles/_variables.scss';
+
 .page {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background-color: #07263c;
+  background-color: $defaultPrimary;
   width: 100%;
   height: 100%;
   justify-content: center;
 }
 
 .title {
-  color: white;
+  color: $white;
   font-size: 1.5rem;
 }
 
@@ -39,7 +41,7 @@
 }
 
 .nameUser {
-  color: #5188C1;
+  color: $darkBlue;
 }
 
 .numberError {
@@ -49,4 +51,11 @@
 
 .textError {
   font-size: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }

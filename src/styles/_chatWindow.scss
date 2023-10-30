@@ -1,5 +1,7 @@
+@import '/src/styles/_variables.scss';
+
 .pageChat {
-  background-color: black;
+  background-color: $black;
   width: 100%;
   height: 100%;
   display: flex;
@@ -7,7 +9,7 @@
 }
 
 .usersBlock, .messageHeader, .messageInput, .messageHeader {
-  background-color: #17212B;
+  background-color: $darkGray;
 }
 
 .usersBlock {
@@ -44,7 +46,7 @@
 
 .messageHeader {
   height: 50px;
-  color: #7F91A4;
+  color: $dustyBlue;
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -62,16 +64,15 @@
 }
 
 .messageDate {
-  color: #7F91A4;
+  color: $dustyBlue;
   margin: 0 auto;
 }
 
 .messageInput {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 0 8px;
   gap: 0.8rem;
+  align-items: center;
 
   img {
     width: 20px;
@@ -87,7 +88,7 @@
   width: 96%;
   height: 100%;
   border-radius: 5px;
-  background-color: black;
+  background-color: $black;
   padding: 0 4px;
 }
 

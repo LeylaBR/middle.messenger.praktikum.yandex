@@ -1,5 +1,7 @@
+@import '/src/styles/_variables.scss';
+
 html body {
-  color: white;
+  color: $white;
   box-sizing: border-box;
   margin: 0;
   height: 100%;

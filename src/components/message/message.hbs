@@ -3,9 +3,7 @@
 {{#if right}}
     <div class="messageContainer messageContainerRight">{{/if}}
 {{#if left}}
-        <div class="imageUser">
-            <img src="/noAvatar.jpg">
-        </div>
+    {{> avatar/avatar }}
 {{/if}}
     <div>
         {{#if left}}
@@ -17,9 +15,7 @@
         </div>
     </div>
 {{#if right}}
-        <div class="imageUser">
-            <img src="/noAvatar.jpg">
-        </div>
+    {{> avatar/avatar }}
 {{/if}}
 {{#if left}}
     </div>

@@ -1,7 +1,9 @@
+@import '/src/styles/_variables.scss';
+
 .input {
   width: 200px;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid white;
-  color: white;
+  border-bottom: 1px solid $white;
+  color: $white;
 }

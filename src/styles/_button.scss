@@ -1,6 +1,8 @@
+@import '/src/styles/_variables.scss';
+
 .button {
-  color: white;
-  background-color: #5188C1;
+  color: $white;
+  background-color: $blue;
   border-radius: 0.2rem;
   border: none;
   padding: 0.3rem 1rem;
@@ -9,11 +11,11 @@
   text-align: center;
 
   &:hover {
-    background-color: #658FB7;
+    background-color: $grayBlue;
   }
 }
 
 .buttonLink {
   border: none;
-  color: #7F91A4;
+  color: $dustyBlue;
 }

@@ -1,3 +1,5 @@
+@import '/src/styles/_variables.scss';
+
 .messageContainer {
   display: flex;
   gap: 1rem;
@@ -18,14 +20,14 @@
 }
 
 .massageLeft {
-  background-color: #17212B;
+  background-color: $darkGray;
 }
 
 .massageRight {
-  background-color: #2B5279;
+  background-color: $lightPrimary;
 }
 
 .messageTime {
-  color: #7F91A4;
+  color: $dustyBlue;
   font-size: 12px;
 }
