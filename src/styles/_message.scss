@@ -1,0 +1,33 @@
+@import '/src/styles/_variables.scss';
+
+.messageContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.messageContainerRight {
+  justify-content: end;
+}
+
+.massageLeft, .massageRight {
+  width: fit-content;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  align-items: end;
+}
+
+.massageLeft {
+  background-color: $darkGray;
+}
+
+.massageRight {
+  background-color: $lightPrimary;
+}
+
+.messageTime {
+  color: $dustyBlue;
+  font-size: 12px;
+}

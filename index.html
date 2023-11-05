@@ -1,0 +1,15 @@
+{{#> layout/layout title="Login Page"}}
+    <main class="page">
+        <h3 class="title">Авторизация</h3>
+        <form class="form">
+            <div class="inputs">
+                {{> input/input class="input" type="email" placeholder="Введите логин или email" }}
+                {{> input/input class="input" type="password" placeholder="Введите пароль" }}
+            </div>
+            <div class="buttons">
+                {{> button/button href="/src/pages/chatWindow/chatWindow.html" label="Login" }}
+                {{> button/button href="/src/pages/registration/registration.html" label="Registration" }}
+            </div>
+        </form>
+    </main>
+{{/ layout/layout}}
