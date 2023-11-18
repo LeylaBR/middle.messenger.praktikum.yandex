@@ -8,7 +8,10 @@
   gap: 5px;
 }
 
-.usersBlock, .messageHeader, .messageInput, .messageHeader {
+.usersBlock,
+.messageHeader,
+.messageInput,
+.messageHeader {
   background-color: $darkGray;
 }
 
@@ -40,7 +43,8 @@
   justify-content: space-between;
 }
 
-.messageHeader, .messageInput {
+.messageHeader,
+.messageInput {
   height: 50px;
 }
 
@@ -79,9 +83,11 @@
   }
 }
 
-.inputSearch, .inputMessage {
+.inputSearch,
+.inputMessage {
   background-color: transparent;
   border: none;
+  color: $white;
 }
 
 .inputSearch {
@@ -95,4 +101,5 @@
 .inputMessage {
   flex: 1;
   height: 75%;
+  width: 100%;
 }

@@ -1,4 +1,4 @@
-Учебный проект, мессенджер 
+Учебный проект, мессенджер
 
 - `npm install` — установка стабильной версии,
 - `npm run start` — сборка и запуск версии для разработчика,
@@ -12,6 +12,7 @@
   Навигация по проекту реализована через ссылки при нажати на кнопки
 
   Для просмотра страниц локально по роутам необходимо запустить сервер npm run server в браузере перейти на http://localhost:3000/
+
 - http://localhost:3000/ страница авторизации
 - http://localhost:3000/registration страница регистрации
 - http://localhost:3000/chat страница чата
@@ -25,4 +26,3 @@
 - https://subtle-haupia-539448.netlify.app/src/pages/registration/registration страница регистрации
 - https://subtle-haupia-539448.netlify.app/src/pages/chatwindow/chatwindow страница чата
 - https://subtle-haupia-539448.netlify.app/src/pages/settingspage/settingspage страница настройки профиля
-  

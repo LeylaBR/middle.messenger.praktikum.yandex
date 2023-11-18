@@ -11,6 +11,12 @@
   justify-content: center;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .title {
   color: $white;
   font-size: 1.5rem;
@@ -20,6 +26,10 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.hide {
+  display: none;
 }
 
 .buttons {
@@ -58,4 +68,15 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.errorValidation {
+  padding: 5px;
+  border: 1px solid $error !important;
+  border-radius: 7px;
+}
+
+.error {
+  color: $error;
+  font-size: 12px;
 }

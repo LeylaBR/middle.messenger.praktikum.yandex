@@ -1,5 +1,10 @@
 @import '/src/styles/_variables.scss';
 
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .input {
   width: 200px;
   background-color: transparent;
