@@ -8,27 +8,27 @@ import { notFoundPage } from './src/pages/404Page';
 import { serverErrorPage } from './src/pages/500Page';
 
 function handleRouteChange() {
-    const path = window.location.pathname;
+  const path = window.location.pathname;
 
-    switch (path) {
-        case routes.auth:
-            render('.app', authPage);
-            break;
-        case routes.registration:
-            render('.app', registrationPage);
-            break;
-        case routes.chat:
-            render('.app', chatWindowPage);
-            break;
-        case routes.settings:
-            render('.app', settingsPage);
-            break;
-        case routes.serverError:
-            render('.app', serverErrorPage);
-            break;
-        default:
-            render('.app', notFoundPage);
-    }
+  switch (path) {
+    case routes.auth:
+      render('.app', authPage);
+      break;
+    case routes.registration:
+      render('.app', registrationPage);
+      break;
+    case routes.chat:
+      render('.app', chatWindowPage);
+      break;
+    case routes.settings:
+      render('.app', settingsPage);
+      break;
+    case routes.serverError:
+      render('.app', serverErrorPage);
+      break;
+    default:
+      render('.app', notFoundPage);
+  }
 }
 
 window.onpopstate = handleRouteChange;
