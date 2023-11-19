@@ -53,7 +53,7 @@ export const submitForm = (form) => {
 
     let formData = {};
 
-    for (let i = 0; i < inputs.length; i++) {
+    for (let i = 0; i < inputs.length; i + 1) {
         let element = inputs[i];
 
         fieldValidationCheck(element, element.value);

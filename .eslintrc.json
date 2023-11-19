@@ -8,10 +8,18 @@
     "class-methods-use-this": 0,
     "import/no-cycle": 0,
     "max-len": [2, 100],
-    "@typescript-eslint/no-unused-vars": 2,
     "import/extensions": 0,
     "no-unused-vars": "off",
     "import/no-unresolved": "off",
+    "no-useless-escape": "off",
+    "prefer-arrow-callback": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "import/prefer-default-export": "off",
+    "no-undef": "off",
+    "no-console": "off",
+    "prefer-const": "off",
+    "no-case-declarations": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -20,6 +28,9 @@
         "leadingUnderscore": "allow"
       }
     ]
+  },
+  "globals": {
+    "document": true
   },
   "settings": {
     "react": {

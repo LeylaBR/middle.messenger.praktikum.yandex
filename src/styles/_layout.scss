@@ -1,4 +1,11 @@
-@import '/src/styles/_variables.scss';
+@import "/src/styles/_variables.scss";
+
+body {
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.42;
+}
 
 html body {
     color: $white;
@@ -6,13 +13,6 @@ html body {
     margin: 0;
     height: 100%;
     font-size: 14px;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.42;
 }
 
 a {
