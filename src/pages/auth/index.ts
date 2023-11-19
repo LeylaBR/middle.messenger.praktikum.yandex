@@ -20,8 +20,8 @@ const authInputs = authInputsData.map((inputData) => {
     value,
     required,
     events: {
-      click: (event) => {
-        inputEventListeners(event.target);
+      click: (event: MouseEvent) => {
+        inputEventListeners(event.target as HTMLInputElement);
       },
     },
   });
@@ -35,9 +35,11 @@ const loginButton = new Button('button', {
   },
   label: 'Login',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
-      const form = document.getElementById(formIds.auth);
+      const form: HTMLElement = document.getElementById(
+        formIds.auth
+      ) as HTMLElement;
       submitForm(form);
     },
   },
@@ -49,7 +51,7 @@ const registrationButton = new Button('button', {
   },
   label: 'Registration',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
       window.location.href = routes.registration;
     },

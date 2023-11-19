@@ -6,7 +6,10 @@ class Input extends Block {
     return this.compile(template, this.props);
   }
 
-  componentDidUpdate(oldProps, newProps): boolean {
+  componentDidUpdate(
+    oldProps: Record<string, unknown>,
+    newProps: Record<string, unknown>
+  ): boolean {
     return oldProps.value !== newProps.value;
   }
 }

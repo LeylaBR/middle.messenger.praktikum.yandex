@@ -7,7 +7,7 @@ const backButton = new Button('button', {
   },
   label: 'Back',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
       window.history.back();
     },

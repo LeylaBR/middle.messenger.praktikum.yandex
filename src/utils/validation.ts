@@ -1,4 +1,4 @@
-export const validationForm = (name, value) => {
+export const validationForm = (name: string, value: string) => {
   switch (name) {
     case 'first_name':
     case 'second_name':

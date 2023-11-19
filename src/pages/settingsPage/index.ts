@@ -24,8 +24,8 @@ const settingsInputs = settingsInputsData.map((inputData) => {
     value,
     required,
     events: {
-      click: (event) => {
-        inputEventListeners(event.target);
+      click: (event: MouseEvent) => {
+        inputEventListeners(event.target as HTMLInputElement);
       },
     },
   });
@@ -37,9 +37,9 @@ const saveButton = new Button('button', {
   },
   label: 'Save',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
-      const form = document.getElementById(formIds.settings);
+      const form: any = document.getElementById(formIds.settings);
       submitForm(form);
     },
   },
@@ -51,7 +51,7 @@ const cancelButton = new Button('button', {
   },
   label: 'Cancel',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
       window.location.href = routes.chat;
     },

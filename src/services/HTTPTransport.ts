@@ -1,3 +1,10 @@
+interface OptionsType {
+  method: string;
+  timeout?: number;
+  headers: Record<string, unknown>;
+  data: unknown;
+}
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -5,27 +12,31 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-function queryStringify(data) {
+function queryStringify(data: Record<string, unknown>) {
   return Object.keys(data)
     .map((key) => `${key}=${data[key]}`)
     .join('&');
 }
 
 class HTTPTransport {
-  get = (url, options: any = {}) =>
+  get = (url: string, options: OptionsType = {} as OptionsType) =>
     this.request(url, { ...options, method: METHODS.GET }, options.timeout);
 
-  put = (url, options: any = {}) =>
+  put = (url: string, options: OptionsType = {} as OptionsType) =>
     this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
 
-  post = (url, options: any = {}) =>
+  post = (url: string, options: OptionsType = {} as OptionsType) =>
     this.request(url, { ...options, method: METHODS.POST }, options.timeout);
 
-  delete = (url, options: any = {}) =>
+  delete = (url: string, options: OptionsType = {} as OptionsType) =>
     this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
 
-  request = (url, options = { method: METHODS.GET }, timeout = 5000) => {
-    const { headers, data, method } = options;
+  request = (
+    url: string,
+    options = { method: METHODS.GET },
+    timeout = 5000
+  ) => {
+    const { headers, data, method }: any = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

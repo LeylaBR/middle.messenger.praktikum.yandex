@@ -1,5 +1,11 @@
-export function render(query, block) {
-  const root = document.querySelector(query);
+export function render(
+  query: string,
+  block: {
+    getContent: any;
+    dispatchComponentDidMount: any;
+  }
+) {
+  const root: any = document.querySelector(query);
 
   root.appendChild(block.getContent());
 

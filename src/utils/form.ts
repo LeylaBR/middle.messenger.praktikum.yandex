@@ -1,23 +1,30 @@
 import { validationForm } from './validation';
 import { emptyFieldText, incorrectValueText } from '../constants';
 
-const addError = (el, textError) => {
-  const errorElement = document.getElementById(`error_${el.name}`);
-  el.classList.add('errorValidation');
-  errorElement.classList.remove('hide');
-  errorElement.classList.add('error');
-  errorElement.textContent = textError;
+const addError = (el: HTMLInputElement, textError: string) => {
+  const errorElement: HTMLElement = document.getElementById(
+    `error_${el.name}`
+  ) as HTMLElement;
+  if (errorElement) {
+    el.classList.add('errorValidation');
+    errorElement.classList.remove('hide');
+    errorElement.classList.add('error');
+    errorElement.textContent = textError;
+  }
 };
 
-const removeError = (el) => {
-  const errorElement = document.getElementById(`error_${el.name}`);
-
-  el.classList.remove('errorValidation');
-  errorElement.classList.remove('error');
-  errorElement.classList.add('hide');
+const removeError = (el: HTMLInputElement) => {
+  const errorElement: HTMLElement = document.getElementById(
+    `error_${el.name}`
+  ) as HTMLElement;
+  if (errorElement) {
+    el.classList.remove('errorValidation');
+    errorElement.classList.remove('error');
+    errorElement.classList.add('hide');
+  }
 };
 
-const fieldValidationCheck = (element, value) => {
+const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
   if (element.name === 'message' && !value) {
     element.classList.add('errorValidation');
     return;
@@ -35,33 +42,33 @@ const fieldValidationCheck = (element, value) => {
   }
 };
 
-export const inputEventListeners = (element) => {
-  element.addEventListener('blur', (e) => {
-    if (!Boolean(e.target.value) && !element.required) {
+export const inputEventListeners = (element: HTMLInputElement) => {
+  element.addEventListener('blur', (e: FocusEvent) => {
+    if (!Boolean((e.target as HTMLInputElement).value) && !element.required) {
       return;
     }
-    fieldValidationCheck(element, e.target.value);
+    fieldValidationCheck(element, (e.target as HTMLInputElement).value);
   });
 
-  element.addEventListener('input', (e) => {
-    fieldValidationCheck(element, e.target.value);
+  element.addEventListener('input', (e: Event) => {
+    fieldValidationCheck(element, (e.target as HTMLInputElement).value);
   });
 };
 
-export const submitForm = (form) => {
+export const submitForm = (form: HTMLElement) => {
   const inputs = form.querySelectorAll('input');
 
-  let formData = {};
+  let formData: any = {};
 
-  for (let i = 0; i < inputs.length; i + 1) {
-    let element = inputs[i];
+  inputs.forEach((input) => {
+    let element: HTMLInputElement = input;
 
     fieldValidationCheck(element, element.value);
     const errors = form.querySelectorAll('.error');
-    if (!errors.length) {
+    if (!errors.length && element) {
       formData[element.name] = element.value;
     }
-  }
+  });
 
   console.log(formData);
 };

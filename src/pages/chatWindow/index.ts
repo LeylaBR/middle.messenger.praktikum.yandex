@@ -19,7 +19,7 @@ const profileButton = new Button('button', {
   },
   label: 'Профиль',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
       window.location.href = routes.settings;
     },
@@ -33,9 +33,9 @@ const searchInput = new Input('div', {
   id: 'search',
   value: '',
   events: {
-    input: (event) => {
+    input: (event: InputEvent) => {
       console.log({
-        search: event.target.value,
+        search: (event.target as HTMLInputElement).value,
       });
     },
   },
@@ -101,9 +101,9 @@ const sendButton = new Button('button', {
   },
   label: 'Отправить',
   events: {
-    click: (event) => {
+    click: (event: MouseEvent) => {
       event.preventDefault();
-      const form = document.getElementById(formIds.message);
+      const form: any = document.getElementById(formIds.message);
       submitForm(form);
     },
   },
