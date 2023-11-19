@@ -18,6 +18,5 @@
     "noUnusedParameters": true,
     "strict": true,
     "strictFunctionTypes": true
-  },
-  "exclude": ["node_modules", "dist"]
+  }
 }

@@ -1,9 +1,9 @@
 export function render(query, block) {
-  const root = document.querySelector(query);
+    const root = document.querySelector(query);
 
-  root.appendChild(block.getContent());
+    root.appendChild(block.getContent());
 
-  block.dispatchComponentDidMount();
+    block.dispatchComponentDidMount();
 
-  return root;
+    return root;
 }

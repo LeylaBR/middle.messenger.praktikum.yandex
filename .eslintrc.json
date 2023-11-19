@@ -20,5 +20,10 @@
         "leadingUnderscore": "allow"
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
