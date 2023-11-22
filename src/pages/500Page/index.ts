@@ -14,7 +14,7 @@ const backButton = new Button('button', {
   },
 });
 
-const serverError = new ServerErrorPage('main', {
+const serverError = new ServerErrorPage('div', {
   attr: {
     class: 'page',
   },

@@ -52,7 +52,7 @@ const registrationButton = new Button('button', {
   },
 });
 
-const registration = new Registration('main', {
+const registration = new Registration('div', {
   attr: {
     class: 'page',
   },

@@ -1,7 +1,20 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../../components/types';
 
-class Auth extends Block {
+interface Props {
+  attr: AttrProps;
+}
+
+interface AuthProps extends TagNameComponent {
+  props: Props;
+  idForm: string;
+  loginButton: any;
+  registrationButton: any;
+  authInputs: any;
+}
+
+class Auth extends Block<AuthProps> {
   render() {
     return this.compile(template, {
       ...this.props,

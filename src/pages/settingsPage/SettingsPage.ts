@@ -1,7 +1,21 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../../components/types';
 
-class SettingsPage extends Block {
+interface Props {
+  attr: AttrProps;
+}
+
+interface SettingsPageProps extends TagNameComponent {
+  props: Props;
+  avatar: any;
+  idForm: string;
+  cancelButton: any;
+  saveButton: any;
+  settingsInputs: any;
+}
+
+class SettingsPage extends Block<SettingsPageProps> {
   render() {
     return this.compile(template, {
       ...this.props,

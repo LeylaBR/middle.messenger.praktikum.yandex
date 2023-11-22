@@ -1,7 +1,17 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../../components/types';
 
-class ServerErrorPage extends Block {
+interface Props {
+  attr: AttrProps;
+}
+
+interface ServerErrorPageProps extends TagNameComponent {
+  props: Props;
+  backButton: any;
+}
+
+class ServerErrorPage extends Block<ServerErrorPageProps> {
   render() {
     return this.compile(template, {
       backButton: this.props.backButton,

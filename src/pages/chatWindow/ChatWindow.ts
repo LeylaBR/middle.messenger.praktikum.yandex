@@ -1,7 +1,23 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../../components/types';
 
-class ChatWindows extends Block {
+interface Props {
+  attr: AttrProps;
+}
+
+interface ChatWindowsProps extends TagNameComponent {
+  props: Props;
+  profileButton: any;
+  searchInput: any;
+  userItems: any;
+  messages: any;
+  messageInput: any;
+  sendButton: any;
+  idForm: string;
+}
+
+class ChatWindows extends Block<ChatWindowsProps> {
   render() {
     return this.compile(template, {
       ...this.props,

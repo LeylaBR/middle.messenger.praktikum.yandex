@@ -58,7 +58,7 @@ const registrationButton = new Button('button', {
   },
 });
 
-const auth = new Auth('main', {
+const auth = new Auth('div', {
   attr: {
     class: 'page',
   },

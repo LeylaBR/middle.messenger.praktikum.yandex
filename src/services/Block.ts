@@ -2,30 +2,13 @@ import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import EventBus from './EventBus';
 
-interface PropsType {
-  [key: string]: unknown;
-}
-
-interface ChildrenProps {
-  [key: string]: Block;
-}
-
-interface ListsProps {
-  [key: string]: Block[];
-}
-
-interface Meta {
-  tagName: string;
-  props: PropsType;
-}
-
 interface EventBusOptions {
   on(event: string, callback: (...args: any[]) => void): void;
   off(event: string, callback: (...args: any[]) => void): void;
   emit(event: string, ...args: any[]): void;
 }
 
-class Block {
+class Block<Props extends { [key: string]: any }> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -39,17 +22,20 @@ class Block {
 
   private _id: string;
 
-  public children: ChildrenProps;
+  public children: Props;
 
-  public lists: ListsProps;
+  public lists: Props;
 
-  public props: any;
+  public props: Props;
 
   public eventBus: any;
 
-  public meta: Meta;
+  public meta: {
+    tagName: string;
+    props: Props;
+  };
 
-  constructor(tagName: string = 'div', propsAndChildren = {}) {
+  constructor(tagName: string = 'div', propsAndChildren: Props | {} = {}) {
     const { children, lists, props } = this._getChildren(propsAndChildren);
 
     const eventBus = new EventBus();
@@ -227,7 +213,7 @@ class Block {
     const compiledTemplate = Handlebars.compile(template);
     fragment.innerHTML = compiledTemplate(propsAndStubs);
 
-    Object.values(this.children).forEach((child: Block) => {
+    Object.values(this.children).forEach((child: any) => {
       const stub: any = fragment.content.querySelector(
         `[data-id="${child._id}"]`
       );
@@ -246,7 +232,7 @@ class Block {
         'template'
       ) as HTMLTemplateElement;
 
-      list.forEach((el: Block | string) => {
+      list.forEach((el: any | string) => {
         if (el instanceof Block) {
           listContent.content.append(el.getContent() as HTMLElement);
         } else {

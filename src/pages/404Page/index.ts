@@ -14,7 +14,7 @@ const backButton = new Button('button', {
   },
 });
 
-const notFound = new NotFoundPage('main', {
+const notFound = new NotFoundPage('div', {
   attr: {
     class: 'page',
   },

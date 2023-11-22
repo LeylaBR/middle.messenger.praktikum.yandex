@@ -1,7 +1,16 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../types';
 
-class Avatar extends Block {
+interface Props {
+  attr: AttrProps;
+}
+
+interface AvatarProps extends TagNameComponent {
+  props: Props;
+}
+
+class Avatar extends Block<AvatarProps> {
   render() {
     return this.compile(template, this.props);
   }

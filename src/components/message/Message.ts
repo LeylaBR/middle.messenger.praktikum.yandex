@@ -1,7 +1,22 @@
 import Block from '../../services';
 import { template } from './template';
+import { TagNameComponent } from '../types';
 
-class Message extends Block {
+interface Props {
+  className: string;
+  left: boolean;
+  right: boolean;
+  name: string;
+  text: string;
+  time: string;
+}
+
+interface MessageProps extends TagNameComponent {
+  props: Props;
+  avatar: any;
+}
+
+class Message extends Block<MessageProps> {
   render() {
     return this.compile(template, {
       ...this.props,

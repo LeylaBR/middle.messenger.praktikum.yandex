@@ -1,7 +1,19 @@
 import Block from '../../services';
 import { template } from './template';
+import { AttrProps, TagNameComponent } from '../types';
 
-class UserItem extends Block {
+interface Props {
+  attr: AttrProps;
+  name: string;
+  info: string;
+}
+
+interface UserItemProps extends TagNameComponent {
+  props: Props;
+  avatar: any;
+}
+
+class UserItem extends Block<UserItemProps> {
   render() {
     return this.compile(template, {
       ...this.props,

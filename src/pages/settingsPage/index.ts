@@ -58,7 +58,7 @@ const cancelButton = new Button('button', {
   },
 });
 
-const settings = new SettingsPage('main', {
+const settings = new SettingsPage('div', {
   attr: {
     class: 'page',
   },
