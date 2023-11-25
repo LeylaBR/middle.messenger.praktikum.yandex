@@ -1,3 +1,3 @@
-<div class="imageUser">
+export const template = `
     <img src="/noAvatar.jpg" alt="noAvatar">
-</div>
+`;
