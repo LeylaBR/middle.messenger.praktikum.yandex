@@ -1,10 +1,12 @@
-export const render = (query, block) => {
-  const root = document.querySelector(query);
+export const render = (query: string, block: string) => {
+  const root = document.querySelector(query) as HTMLElement;
+
   root.textContent = block;
+
   return root;
 };
 
-export function isEmpty(value) {
+export function isEmpty(value: any) {
   if (typeof value === 'number') {
     return true;
   }
@@ -36,6 +38,8 @@ export function isEmpty(value) {
   if (typeof value === 'boolean') {
     return value;
   }
+
+  return false;
 }
 
 export function isEqual(a: object, b: object): boolean {
@@ -54,31 +58,34 @@ export function isEqual(a: object, b: object): boolean {
     return false;
   }
 
-  for (const key of keysA) {
-    if (!keysB.includes(key) || !isEqual(a[key], b[key])) {
-      return false;
-    }
+  const areKeysEqual =
+    keysA.length === keysB.length &&
+    keysA.every((key) => keysB.includes(key) && isEqual(a[key], b[key]));
+
+  if (!areKeysEqual) {
+    return false;
   }
 
   return true;
 }
 
 function merge(target: any, source: any) {
-  for (const key in source) {
-    if (source.hasOwnProperty(key)) {
+  const merged = { ...target };
+
+  Object.keys(source).forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
       if (source[key] instanceof Object && !Array.isArray(source[key])) {
-        Object.assign(source[key], merge(target[key], source[key]));
+        merged[key] = merge(target[key], source[key]);
+      } else {
+        merged[key] = source[key];
       }
     }
-  }
-  return { ...target, ...source };
+  });
+
+  return merged;
 }
 
-export function set(
-  object: any | unknown,
-  path: string,
-  value: unknown
-): any | unknown {
+export function set(object: any, path: string, value: any): any {
   if (typeof path !== 'string') {
     throw new Error('path must be string');
   }
@@ -88,18 +95,18 @@ export function set(
   }
 
   const keys = path.split('.');
-  let currentObject: any = object;
+  let currentObject: any | {} = object;
 
-  for (let i = 0; i < keys.length - 1; i++) {
-    const key: string = keys[i];
-    if (!currentObject[key] || !(currentObject[key] instanceof Object)) {
-      currentObject[key] = {} as any;
+  for (let i = 0; i < keys.length - 1; i += 1) {
+    const key: any = keys[i];
+    if (!currentObject[key] || !currentObject[key]) {
+      currentObject[key] = {};
     }
     currentObject = currentObject[key];
   }
 
-  const lastKey = keys[keys.length - 1];
-  currentObject[lastKey] = value as any;
+  const lastKey: any = keys[keys.length - 1];
+  currentObject[lastKey] = value;
 
   return merge({}, object);
 }

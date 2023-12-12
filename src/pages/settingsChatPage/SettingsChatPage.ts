@@ -1,18 +1,14 @@
 import Block from '../../services';
 import { template } from './template';
-import { AttrProps, TagNameComponent } from '../../components/types';
+import { TagNameComponent } from '../../components/types';
 import { connect } from '../../services/Connect';
 import ChatController from '../../controllers/ChatController';
 import UserItem from '../../components/userItem/UserItem';
 import { getAvatar } from '../utils';
 import ChatAPI from '../../api/ChatAPI';
 
-interface Props {
-  attr: AttrProps;
-}
-
 interface SettingsChatProps extends TagNameComponent {
-  props: Props;
+  props: any;
   avatar: any;
   searchInput: any;
   searchSelect: any;
@@ -23,8 +19,14 @@ interface SettingsChatProps extends TagNameComponent {
   chatUsers: any;
 }
 
+function mapUserToProps(state: any) {
+  return {
+    chatUsers: state.chatUsers,
+  };
+}
+
 class SettingsChatPage extends Block<SettingsChatProps> {
-  constructor(tagName, props) {
+  constructor(tagName: string, { props }: any) {
     super(tagName, props);
     this.getData();
   }
@@ -34,12 +36,12 @@ class SettingsChatPage extends Block<SettingsChatProps> {
     return Number(pathParts[pathParts.length - 1]);
   }
 
-  initUsers(data) {
+  initUsers(data: any) {
     const usersList = data ? data.data : [];
 
     if (usersList.length) {
-      const users = usersList.map((chat) => {
-        const { first_name: name, avatar, last_message: info, id } = chat;
+      const users = usersList.map((chat: any) => {
+        const { first_name: name, last_message: info, id } = chat;
 
         const block = new UserItem('div', {
           attr: {
@@ -55,18 +57,19 @@ class SettingsChatPage extends Block<SettingsChatProps> {
               const regApi = new ChatAPI();
               const regApiChat = new ChatController();
               const chatId = this.getChatId();
-              console.log(event.target);
-              if (event.target.id === 'deleteButton') {
+
+              if ((event.target as any).id === 'deleteButton') {
                 if (id && chatId) {
-                  const data = {
-                    users: [id],
-                    chatId,
-                  };
-                  regApi.deleteUsers(data).then((res) => {
-                    if (res === 'OK') {
-                      regApiChat.getChatUsers(chatId);
-                    }
-                  });
+                  regApi
+                    .deleteUsers({
+                      users: [id],
+                      chatId,
+                    })
+                    .then((res) => {
+                      if (res === 'OK') {
+                        regApiChat.getChatUsers(chatId);
+                      }
+                    });
                 }
               }
             },
@@ -103,9 +106,3 @@ class SettingsChatPage extends Block<SettingsChatProps> {
 }
 
 export default connect(SettingsChatPage, mapUserToProps);
-
-function mapUserToProps(state) {
-  return {
-    chatUsers: state.chatUsers,
-  };
-}

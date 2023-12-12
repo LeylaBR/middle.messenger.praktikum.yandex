@@ -1,6 +1,6 @@
 import Block from '../../services';
 import { template } from './template';
-import { AttrProps, TagNameComponent } from '../../components/types';
+import { TagNameComponent } from '../../components/types';
 import { connect } from '../../services/Connect';
 
 import UserController from '../../controllers/UserController';
@@ -11,41 +11,46 @@ import { Message, UserItem } from '../../components';
 
 export const socket = new WSTransport();
 
-interface Props {
-  attr: AttrProps;
-}
-
 interface ChatWindowsProps extends TagNameComponent {
-  props: Props;
+  props: any;
   profileButton: any;
   searchInput: any;
   userItems: any;
   messageInput: any;
   sendButton: any;
-  idForm: string;
+  idForm: any;
   newChatButton: any;
-  chats: { data: any[] };
+  chats: any;
   user: any;
-  chatUsers: any[];
-  messages: any[];
+  chatUsers: any;
+  messages: any;
+}
+
+function mapChatToProps(state: any) {
+  return {
+    chats: state.chats,
+    user: state.user,
+    chatUsers: state.chatUsers,
+    messages: state.messages,
+  };
 }
 
 class ChatWindows extends Block<ChatWindowsProps> {
-  constructor(tagName, props) {
+  constructor(tagName: string, props: any) {
     super(tagName, props);
     this.getData();
   }
 
-  initChats(data) {
+  initChats(data: any) {
     const chatsList = data ? data.data : [];
 
     if (chatsList.length) {
-      const chats = chatsList.map((chat) => {
+      const chats = chatsList.map((chat: Record<string, any>) => {
         const { title: name, avatar, last_message: info, id } = chat;
         const regApiChat = new ChatController();
 
-        regApiChat.getToken(id).then((token) => {
-          this.props[`token_${id}`] = token;
+        regApiChat.getToken(id).then((token: string) => {
+          (this.props as any)[`token_${id}`] = token;
         });
 
         const block = new UserItem('div', {
@@ -57,23 +62,20 @@ class ChatWindows extends Block<ChatWindowsProps> {
           info: info ? info.content : '',
           id,
           events: {
-            click: async (event: MouseEvent) => {
+            click: async (event: any) => {
               event.preventDefault();
-
-              const regApiChat = new ChatController();
 
               const nameChat = document.getElementById('chatName');
               const chatSettings = document.getElementById('chatSettings');
-              const token = this.props[`token_${id}`];
-              const userId = this.props.user.id;
-              nameChat.textContent = name;
-              chatSettings.classList.remove('hide');
-              chatSettings.classList.add('buttonLink');
+              const token: string = (this.props as any)[`token_${id}`];
+              const userId: string = this.props.user.id;
 
-              chatSettings.addEventListener('click', (e) => {
-                event.preventDefault();
-                window.location.href = `/chat/settings/${id}`;
-              });
+              if (chatSettings) {
+                chatSettings.addEventListener('click', () => {
+                  event.preventDefault();
+                  window.location.href = `/chat/settings/${id}`;
+                });
+              }
 
               try {
                 await socket.connect(userId, id, token);
@@ -82,10 +84,19 @@ class ChatWindows extends Block<ChatWindowsProps> {
                   content: 0,
                 });
 
-                if (event.target.id === 'deleteButton') {
+                if (nameChat) {
+                  nameChat.textContent = name;
+                }
+
+                if (chatSettings) {
+                  chatSettings.classList.remove('hide');
+                  chatSettings.classList.add('buttonLink');
+                }
+
+                if (event.target && event.target.id === 'deleteButton') {
                   regApiChat.deleteChats(id);
                 }
-              } catch (error) {
+              } catch (error: any) {
                 console.error('Error connecting to WebSocket:', error);
               }
             },
@@ -99,13 +110,13 @@ class ChatWindows extends Block<ChatWindowsProps> {
     }
   }
 
-  renderMessages(user, data) {
+  renderMessages(user: any, data: any) {
     const myId = user?.id;
     const listMessages = data?.data;
     if (myId && listMessages) {
-      const messages = listMessages.map((message) => {
+      const messages = listMessages.map((message: Record<string, any>) => {
         const { user_id, content } = message;
-        const myMessage = myId === user_id;
+        const myMessage: boolean = myId === user_id;
 
         return new Message('span', {
           avatar: getAvatar(),
@@ -145,12 +156,3 @@ class ChatWindows extends Block<ChatWindowsProps> {
 }
 
 export default connect(ChatWindows, mapChatToProps);
-
-function mapChatToProps(state) {
-  return {
-    chats: state.chats,
-    user: state.user,
-    chatUsers: state.chatUsers,
-    messages: state.messages,
-  };
-}

@@ -1,13 +1,12 @@
 import store, { StoreEvents } from './Store';
 import { isEqual } from './utils';
-import Block from './Block';
 
-export function connect<T>(
-  Component: typeof Block<T>,
-  mapStateToProps: (state: any) => any
+export function connect(
+  Component: any,
+  mapStateToProps: (state: object) => object
 ) {
   return class extends Component {
-    constructor(tagName, props) {
+    constructor(tagName: string, props: any) {
       let state = mapStateToProps(store.getState());
 
       super(tagName, props);
@@ -15,7 +14,6 @@ export function connect<T>(
       store.on(StoreEvents.Updated, () => {
         const newState = mapStateToProps(store.getState());
 
-        // если что-то из используемых данных поменялось, обновляем компонент
         if (!isEqual(state, newState)) {
           this.setProps({ ...newState });
         }

@@ -46,7 +46,7 @@ const loginButton = new Button('button', {
       if (!isEmpty(body)) {
         const regApi = new AuthAPI();
         regApi
-          .create(body)
+          .signin(body)
           .then((data) => {
             if (data === 'OK') {
               localStorage.setItem('currentUser', 'true');

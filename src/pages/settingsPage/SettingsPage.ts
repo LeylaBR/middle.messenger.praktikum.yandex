@@ -10,13 +10,19 @@ interface Props {
 interface SettingsPageProps extends TagNameComponent {
   props: Props;
   avatar: any;
-  idForm: string;
+  idForm: any;
   cancelButton: any;
   saveButton: any;
   settingsInputs: any;
   logoutButton: any;
   fileButton: any;
   user: any;
+}
+
+function mapUserToProps(state: any) {
+  return {
+    user: state.user,
+  };
 }
 
 class SettingsPage extends Block<SettingsPageProps> {
@@ -34,7 +40,7 @@ class SettingsPage extends Block<SettingsPageProps> {
   }
 
   getNewData() {
-    const avatar = document.getElementById('avatar');
+    // const avatar = document.getElementById('avatar');
     const inputs = document.querySelectorAll<HTMLInputElement>('input');
 
     inputs.forEach((input) => {
@@ -47,9 +53,3 @@ class SettingsPage extends Block<SettingsPageProps> {
 }
 
 export default connect(SettingsPage, mapUserToProps);
-
-function mapUserToProps(state) {
-  return {
-    user: state.user,
-  };
-}

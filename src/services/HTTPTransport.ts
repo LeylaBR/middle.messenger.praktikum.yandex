@@ -22,16 +22,14 @@ function queryStringify(data: Record<string, unknown>) {
 }
 
 class HTTPTransport {
-  get = (url: string, options: OptionsArg = {}) => {
-    return this.request(url, { ...options, method: METHODS.GET });
-  };
+  get = (url: string, options: OptionsArg = {}) =>
+    this.request(url, { ...options, method: METHODS.GET });
 
   put = (url: string, options: OptionsArg = {}) =>
     this.request(url, { ...options, method: METHODS.PUT });
 
-  post = (url: string, options: OptionsArg = {}) => {
-    return this.request(url, { ...options, method: METHODS.POST });
-  };
+  post = (url: string, options: OptionsArg = {}) =>
+    this.request(url, { ...options, method: METHODS.POST });
 
   delete = (url: string, options: OptionsArg = {}) =>
     this.request(url, { ...options, method: METHODS.DELETE });
@@ -41,7 +39,7 @@ class HTTPTransport {
     options = { method: METHODS.GET },
     timeout = 5000
   ) => {
-    const { headers, data, method, withCredentials = true }: any = options;
+    const { data, method, withCredentials = true }: any = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

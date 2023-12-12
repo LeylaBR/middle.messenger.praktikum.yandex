@@ -1,15 +1,22 @@
 import Route from './Route';
+import Block from './Block';
 
 class Router {
   private routes: Route[];
+
   private history: History;
-  private _currentRoute: Route | null;
+
+  private _currentRoute?: Route | null;
+
   private _rootQuery: string;
+
   private static __instance: Router | null = null;
 
   constructor(rootQuery: string) {
     if (Router.__instance) {
-      return Router.__instance;
+      throw new Error(
+        'Router instance already exists. Use Router.getInstance()'
+      );
     }
 
     this.routes = [];
@@ -20,7 +27,7 @@ class Router {
     Router.__instance = this;
   }
 
-  use(pathname, block) {
+  use(pathname: string, block: Block) {
     const route = new Route(pathname, block, {
       rootQuery: this._rootQuery,
     });
@@ -37,8 +44,8 @@ class Router {
     this._onRoute(window.location.pathname);
   }
 
-  _onRoute(pathname) {
-    const route = this.getRoute(pathname);
+  _onRoute(pathname: string) {
+    const route: any = this.getRoute(pathname);
 
     if (this._currentRoute) {
       this._currentRoute.leave();
@@ -48,7 +55,7 @@ class Router {
     route.render();
   }
 
-  go(pathname) {
+  go(pathname: string) {
     this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }
@@ -61,7 +68,7 @@ class Router {
     this.history.forward();
   }
 
-  getRoute(pathname) {
+  getRoute(pathname: string) {
     return this.routes.find((route) => route.match(pathname));
   }
 }

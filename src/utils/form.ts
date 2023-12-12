@@ -27,7 +27,7 @@ const removeError = (el: HTMLInputElement) => {
 const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
   if (element.name === 'message' && !value) {
     element.classList.add('errorValidation');
-    return null;
+    return;
   }
 
   if (value || !element.required) {

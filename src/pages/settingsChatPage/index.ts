@@ -13,9 +13,9 @@ const searchInput = new Input('div', {
   id: 'searchUsers',
   value: '',
   events: {
-    input: (event: InputEvent) => {
+    input: (event: any) => {
       event.preventDefault();
-      const value = (event.target as HTMLInputElement).value;
+      const { value }: any = event.target;
       const select = document.getElementById('searchUser') as HTMLInputElement;
 
       const regApi = new ChatAPI();
@@ -28,7 +28,7 @@ const searchInput = new Input('div', {
       regApi.searchUsers(value).then((res) => {
         const fragment = document.createDocumentFragment();
         if (res.length) {
-          res.forEach((el) => {
+          res.forEach((el: any) => {
             const option = document.createElement('option');
             option.value = el.id;
             option.textContent = el.first_name;
@@ -92,25 +92,25 @@ const fileButton = new Button('button', {
   },
   label: 'Choose avatar',
   events: {
-    click: (event: Event) => {
+    click: (event: any) => {
       event.preventDefault();
       const input = document.createElement('input');
       const imgElement = document.getElementById('avatar') as HTMLImageElement;
 
       input.type = 'file';
       input.onchange = (_) => {
-        const files = Array.from(input.files);
+        const { files }: any = event.target;
 
         if (files.length > 0) {
-          const reader = new FileReader();
-          const formData = new FormData();
+          const reader: FileReader = new FileReader();
+          const formData: FormData = new FormData();
           formData.append('avatar', files[0]);
 
-          reader.onload = function (e) {
+          reader.onload = function handleFileLoad(e: any) {
             const regApi = new SettingsAPI();
             regApi.uploadAvatar(formData);
 
-            imgElement.src = e.target.result as string;
+            imgElement.src = e.target.result;
           };
 
           reader.readAsDataURL(files[0]);

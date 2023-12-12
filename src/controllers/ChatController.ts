@@ -9,24 +9,20 @@ class ChatController {
     });
   }
 
-  public async getToken(chatId) {
+  public async getToken(chatId: string) {
     const regApi = new ChatAPI();
 
-    return regApi.getToken(chatId).then((data) => {
-      if (data) {
-        return data.token;
-      }
-    });
+    return regApi.getToken(chatId).then((data) => data.token);
   }
 
-  public getChatUsers(id) {
+  public getChatUsers(id: number) {
     const regApi = new ChatAPI();
     regApi.getChatUsers(id).then((data) => {
       store.set('chatUsers', { data });
     });
   }
 
-  public deleteChats(id) {
+  public deleteChats(id: number) {
     const regApi = new ChatAPI();
     regApi.deleteChat(id).then(() => {
       this.getChats();

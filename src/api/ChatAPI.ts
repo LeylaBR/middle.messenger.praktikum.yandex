@@ -1,90 +1,99 @@
-import BaseAPI from './BaseAPI';
+import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
 
 const chatAPIInstance = new HTTP();
 const host = 'https://ya-praktikum.tech/api/v2';
 
-class ChatAPI extends BaseAPI {
+interface AddDeleteUsersArgs {
+  users: number[];
+  chatId: number;
+}
+
+interface SearchUsersArgs {
+  login: string;
+}
+
+interface CreateChatArgs {
+  title: string;
+}
+
+class ChatAPI extends Base {
   getUserInfo() {
-    return chatAPIInstance.get(`${host}/auth/user`).then((data) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .get(`${host}/auth/user`)
+      .then((data: any) => JSON.parse(data.response));
   }
 
   getChats() {
-    return chatAPIInstance.get(`${host}/chats`).then((data) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .get(`${host}/chats`)
+      .then((data: any) => JSON.parse(data.response));
   }
 
-  getToken(chatId) {
+  getToken(chatId: string) {
     return chatAPIInstance
       .post(`${host}/chats/token/${chatId}`)
-      .then((data) => {
-        return JSON.parse(data.response);
-      });
+      .then((data: any) => JSON.parse(data.response));
   }
 
-  getChatUsers(id) {
-    return chatAPIInstance.get(`${host}/chats/${id}/users`).then((data) => {
-      return JSON.parse(data.response);
-    });
+  getChatUsers(id: number) {
+    return chatAPIInstance
+      .get(`${host}/chats/${id}/users`)
+      .then((data: any) => JSON.parse(data.response));
   }
 
-  addUser(data) {
+  addUser(userData: AddDeleteUsersArgs) {
     const options = {
-      data,
+      data: userData,
     };
 
-    return chatAPIInstance.put(`${host}/chats/users`, options).then((data) => {
-      return data.response;
-    });
+    return chatAPIInstance
+      .put(`${host}/chats/users`, options)
+      .then((data: any) => data.response);
   }
 
-  deleteUsers(data) {
+  deleteUsers(userData: AddDeleteUsersArgs) {
     const options = {
-      data,
+      data: userData,
     };
 
     return chatAPIInstance
       .delete(`${host}/chats/users`, options)
-      .then((data) => {
-        return data.response;
-      });
+      .then((data: any) => data.response);
   }
 
-  searchUsers(data) {
+  searchUsers(userData: SearchUsersArgs) {
     const options = {
       data: {
-        login: data,
+        login: userData,
       },
     };
 
-    return chatAPIInstance.post(`${host}/user/search`, options).then((data) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .post(`${host}/user/search`, options)
+      .then((data: any) => JSON.parse(data.response));
   }
 
-  createChat(data) {
+  createChat(chatData: CreateChatArgs) {
     const options = {
-      data,
+      data: chatData,
     };
 
-    return chatAPIInstance.post(`${host}/chats`, options).then((data) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .post(`${host}/chats`, options)
+      .then((data: any) => JSON.parse(data.response));
   }
 
-  deleteChat(id) {
+  deleteChat(id: number) {
     const options = {
       data: {
         chatId: id,
       },
     };
 
-    return chatAPIInstance.delete(`${host}/chats`, options).then((data) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .delete(`${host}/chats`, options)
+      .then((data: any) => JSON.parse(data.response));
   }
 
   request() {

@@ -1,5 +1,5 @@
 export class BaseAPI {
-  create(options) {
+  create() {
     throw new Error('Not implemented');
   }
 

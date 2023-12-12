@@ -1,24 +1,29 @@
-import BaseAPI from './BaseAPI';
+import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
 
 const chatAPIInstance = new HTTP();
 const host = 'https://ya-praktikum.tech/api/v2';
 
-class AuthAPI extends BaseAPI {
-  create(data) {
+interface AuthDataArg {
+  login: string;
+  password: string;
+}
+
+class AuthAPI extends Base {
+  signin(authData: AuthDataArg) {
     const options = {
-      data,
+      data: authData,
     };
 
-    return chatAPIInstance.post(`${host}/auth/signin`, options).then((data) => {
-      return data.response;
-    });
+    return chatAPIInstance
+      .post(`${host}/auth/signin`, options)
+      .then((data: any) => data.response);
   }
 
   logout() {
-    return chatAPIInstance.post(`${host}/auth/logout`).then((data) => {
-      return data.response;
-    });
+    return chatAPIInstance
+      .post(`${host}/auth/logout`)
+      .then((data: any) => data.response);
   }
 
   request() {

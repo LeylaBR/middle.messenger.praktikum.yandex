@@ -1,9 +1,12 @@
 export const isRouteExists = (path: string, routesList: string[]) => {
-  for (const route of routesList) {
+  let exists = false;
+
+  routesList.forEach((route) => {
     const routeRegExp = new RegExp(`^${route.replace(/:\w+/g, '\\w+')}$`);
     if (routeRegExp.test(path)) {
-      return true;
+      exists = true;
     }
-  }
-  return false;
+  });
+
+  return exists;
 };

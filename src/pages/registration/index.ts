@@ -53,7 +53,7 @@ const registrationButton = new Button('button', {
       if (!isEmpty(body)) {
         const regApi = new RegistrationAPI();
         regApi
-          .create(body)
+          .signup(body)
           .then((data) => {
             if (data.id) {
               window.location.href = routes.chat;

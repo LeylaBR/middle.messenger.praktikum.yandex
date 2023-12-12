@@ -33,9 +33,7 @@ const newChatButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      const titleChatInput = document.getElementById(
-        'addChat'
-      ) as HTMLInputElement;
+      const titleChatInput = document.getElementById('addChat') as any;
       const createChatButton = document.getElementById(
         'createChatButton'
       ) as HTMLButtonElement;
@@ -46,14 +44,14 @@ const newChatButton = new Button('button', {
       const regApi = new ChatAPI();
       const regApiController = new ChatController();
 
-      createChatButton.addEventListener('click', (e) => {
+      createChatButton.addEventListener('click', () => {
         if (titleChatInput.value) {
-          const data = {
+          const dataToServer = {
             title: titleChatInput.value,
           };
 
           regApi
-            .createChat(data)
+            .createChat(dataToServer)
             .then((data) => {
               if (data.id) {
                 createChatButton.classList.add('hide');

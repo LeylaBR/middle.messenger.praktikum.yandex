@@ -8,8 +8,8 @@ interface Props {
 
 interface RegistrationProps extends TagNameComponent {
   props: Props;
-  idForm: string;
-  registrationInputs: any;
+  idForm: any;
+  registrationInputs:any;
   loginButton: any;
   registrationButton: any;
 }

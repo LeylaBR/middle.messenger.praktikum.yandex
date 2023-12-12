@@ -34,25 +34,25 @@ const fileButton = new Button('button', {
   },
   label: 'Choose avatar',
   events: {
-    click: (event: MouseEvent) => {
+    click: (event: any) => {
       event.preventDefault();
       const input = document.createElement('input');
       const imgElement = document.getElementById('avatar') as HTMLImageElement;
 
       input.type = 'file';
       input.onchange = (_) => {
-        const files = Array.from(input.files);
+        const { files }: any = event.target;
 
         if (files.length > 0) {
-          const reader = new FileReader();
-          const formData = new FormData();
+          const reader: FileReader = new FileReader();
+          const formData: FormData = new FormData();
           formData.append('avatar', files[0]);
 
-          reader.onload = function (e) {
+          reader.onload = function handleFileLoad(e: any) {
             const regApi = new SettingsAPI();
             regApi.uploadAvatar(formData);
 
-            imgElement.src = e.target.result as string;
+            imgElement.src = e.target.result;
           };
 
           reader.readAsDataURL(files[0]);
@@ -101,7 +101,7 @@ const saveButton = new Button('button', {
         oldPassword,
         newPassword,
       };
-      if (formValue['oldPassword'] === '' && formValue['newPassword'] === '') {
+      if ((formValue.oldPassword === '' && formValue, newPassword === '')) {
         regApi.updateProfile(dataProfile);
       } else {
         regApi.updateProfile(dataProfile);

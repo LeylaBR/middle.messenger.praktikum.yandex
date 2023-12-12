@@ -1,8 +1,7 @@
 import EventBus from './EventBus';
-import message from '../components/message/Message';
 import store from './Store';
 
-class WSTransport<M> extends EventBus<any> {
+class WSTransport extends EventBus {
   static EVENTS = {
     OPEN: 'open',
     CLOSE: 'close',
@@ -11,8 +10,11 @@ class WSTransport<M> extends EventBus<any> {
   };
 
   private socket?: WebSocket;
+
   private pingInterval?: ReturnType<typeof setInterval>;
+
   private readonly pingIntervalTime = 6000;
+
   private url: string;
 
   constructor() {
@@ -28,7 +30,7 @@ class WSTransport<M> extends EventBus<any> {
     this.socket.send(JSON.stringify(data));
   }
 
-  public connect(userId, chatId, token) {
+  public connect(userId: string, chatId: string, token: string): Promise<void> {
     if (this.socket) {
       throw new Error('Already connected');
     }
@@ -38,7 +40,7 @@ class WSTransport<M> extends EventBus<any> {
     this.subscribe(this.socket);
     this.setupPing();
 
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.on(WSTransport.EVENTS.ERROR, reject);
       this.on(WSTransport.EVENTS.OPEN, () => {
         this.off(WSTransport.EVENTS.ERROR, reject);
@@ -58,8 +60,8 @@ class WSTransport<M> extends EventBus<any> {
     }, this.pingIntervalTime);
 
     this.on(WSTransport.EVENTS.CLOSE, () => {
-      clearInterval(this.pingInterval);
-      this.pingInterval = undefined as ReturnType<typeof setInterval>;
+      clearInterval(this.pingInterval as number);
+      this.pingInterval = undefined as any;
     });
   }
 
@@ -84,7 +86,7 @@ class WSTransport<M> extends EventBus<any> {
           return;
         }
         this.emit(WSTransport.EVENTS.MESSAGE, data);
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message);
       }
     });

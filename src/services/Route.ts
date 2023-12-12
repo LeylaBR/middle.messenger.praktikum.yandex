@@ -3,16 +3,16 @@ import Block from './Block';
 
 class Route {
   private _pathname: string;
-  private _blockClass: typeof Block;
-  private _block: any;
+
+  private _blockClass: Block;
+
+  private _block: Block | null;
+
   private _props: { rootQuery: string };
+
   private _params: Record<string, string>;
 
-  constructor(
-    pathname: string,
-    view: typeof Block,
-    props: { rootQuery: string }
-  ) {
+  constructor(pathname: string, view: Block, props: { rootQuery: string }) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;
@@ -20,7 +20,7 @@ class Route {
     this._params = {};
   }
 
-  navigate(pathname) {
+  navigate(pathname: string) {
     if (this.match(pathname)) {
       this._pathname = pathname;
       this.extractParams(pathname);
@@ -34,8 +34,8 @@ class Route {
 
     routeParts.forEach((part, index) => {
       if (part.startsWith(':')) {
-        const paramName = part.slice(1); // Remove the ":" prefix
-        const paramValue = pathParts[index];
+        const paramName: any = part.slice(1);
+        const paramValue: any = pathParts[index];
         this._params[paramName] = paramValue;
       }
     });

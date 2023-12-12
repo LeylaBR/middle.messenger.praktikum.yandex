@@ -1,50 +1,50 @@
-import BaseAPI from './BaseAPI';
+import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
 
 const chatAPIInstance = new HTTP();
 const host = 'https://ya-praktikum.tech/api/v2';
 
-class SettingsAPI extends BaseAPI {
-  create(data) {
-    const options = {
-      data,
-    };
+interface UpdateProfileArgs {
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  email: string;
+  phone: string;
+}
 
-    return chatAPIInstance.post(`${host}/auth/signup`, options).then((data) => {
-      return JSON.parse(data.response);
-    });
-  }
+interface UpdatePasswordArg {
+  oldPassword: string;
+  newPassword: string;
+}
 
-  uploadAvatar(data) {
+class SettingsAPI extends Base {
+  uploadAvatar(avatarData: FormData) {
     const options = {
-      data,
+      data: avatarData,
     };
 
     return chatAPIInstance
       .put(`${host}/user/profile/avatar`, options)
-      .then((data) => {
-        return data.response;
-      });
+      .then((responseData: any) => responseData.response);
   }
 
-  updateProfile(data) {
+  updateProfile(profileData: UpdateProfileArgs) {
     const options = {
-      data,
+      data: profileData,
     };
-    return chatAPIInstance.put(`${host}/user/profile`, options).then((data) => {
-      return data.response;
-    });
+    return chatAPIInstance
+      .put(`${host}/user/profile`, options)
+      .then((responseData: any) => responseData.response);
   }
 
-  updatePassword(data) {
+  updatePassword(passwordData: UpdatePasswordArg) {
     const options = {
-      data,
+      data: passwordData,
     };
     return chatAPIInstance
       .put(`${host}/user/password`, options)
-      .then((data) => {
-        return data.response;
-      });
+      .then((responseData: any) => responseData.response);
   }
 
   request() {

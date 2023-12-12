@@ -11,26 +11,30 @@ import { isRouteExists } from './src/utils';
 
 const router = new Router('.app');
 
-const isValidPath = isRouteExists(window.location.pathname, routesList);
+const isValidPath: boolean = isRouteExists(
+  window.location.pathname,
+  routesList
+);
 
 function redirectToLogin() {
-  router.go(routes.chat);
+  if (window.location.pathname === routes.auth) {
+    router.go(routes.chat);
+  }
 }
 
-isValidPath
-  ? router
-      .use(routes.auth, authPage)
-      .use(routes.registration, registrationPage)
-      .use(routes.chat, chatWindowPage)
-      .use(routes.settingsChat, settingsChatPage)
-      .use(routes.settings, settingsPage)
-      .use(routes.serverError, serverErrorPage)
-      .start()
-  : router.use(window.location.pathname, notFoundPage).start();
+if (isValidPath) {
+  router
+    .use(routes.auth, authPage)
+    .use(routes.registration, registrationPage)
+    .use(routes.chat, chatWindowPage)
+    .use(routes.settingsChat, settingsChatPage)
+    .use(routes.settings, settingsPage)
+    .use(routes.serverError, serverErrorPage)
+    .start();
+} else {
+  router.use(window.location.pathname, notFoundPage).start();
+}
 
-if (
-  window.location.pathname === routes.auth &&
-  localStorage.getItem('currentUser')
-) {
+if (localStorage.getItem('currentUser')) {
   redirectToLogin();
 }
