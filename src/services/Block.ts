@@ -100,7 +100,6 @@ class Block<Props extends { [key: string]: any }> {
   }
 
   componentDidUpdate(oldProps: any, newProps: any) {
-    console.log(oldProps, newProps);
     return true;
   }
 
@@ -194,7 +193,7 @@ class Block<Props extends { [key: string]: any }> {
     return { children, props, lists };
   }
 
-  compile(template: any, props: any): DocumentFragment {
+  compile(template: any, props: any, name = ''): DocumentFragment {
     const propsAndStubs: any = { ...props };
 
     Object.entries(this.children).forEach(([key, child]) => {
@@ -202,7 +201,6 @@ class Block<Props extends { [key: string]: any }> {
     });
 
     Object.entries(this.lists).forEach(([key, list]) => {
-      console.log(list);
       propsAndStubs[key] = `<div data-id="__1_${key}"></div>`;
     });
 

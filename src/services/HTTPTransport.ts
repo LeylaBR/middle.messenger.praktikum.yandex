@@ -1,9 +1,12 @@
 interface OptionsType {
   method: string;
-  timeout?: number;
   headers: Record<string, unknown>;
   data: unknown;
+  timeout?: number | string;
+  withCredentials?: boolean;
 }
+
+type OptionsArg = OptionsType | {};
 
 const METHODS = {
   GET: 'GET',
@@ -19,27 +22,31 @@ function queryStringify(data: Record<string, unknown>) {
 }
 
 class HTTPTransport {
-  get = (url: string, options: OptionsType = {} as OptionsType) =>
-    this.request(url, { ...options, method: METHODS.GET }, options.timeout);
+  get = (url: string, options: OptionsArg = {}) => {
+    return this.request(url, { ...options, method: METHODS.GET });
+  };
 
-  put = (url: string, options: OptionsType = {} as OptionsType) =>
-    this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
+  put = (url: string, options: OptionsArg = {}) =>
+    this.request(url, { ...options, method: METHODS.PUT });
 
-  post = (url: string, options: OptionsType = {} as OptionsType) =>
-    this.request(url, { ...options, method: METHODS.POST }, options.timeout);
+  post = (url: string, options: OptionsArg = {}) => {
+    return this.request(url, { ...options, method: METHODS.POST });
+  };
 
-  delete = (url: string, options: OptionsType = {} as OptionsType) =>
-    this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
+  delete = (url: string, options: OptionsArg = {}) =>
+    this.request(url, { ...options, method: METHODS.DELETE });
 
   request = (
     url: string,
     options = { method: METHODS.GET },
     timeout = 5000
   ) => {
-    const { headers, data, method }: any = options;
+    const { headers, data, method, withCredentials = true }: any = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+
+      xhr.withCredentials = withCredentials;
 
       if (method === METHODS.GET && data) {
         xhr.open(method, `${url}?${queryStringify(data)}`);
@@ -47,16 +54,14 @@ class HTTPTransport {
         xhr.open(method, url);
       }
 
-      if (headers) {
-        Object.keys(headers).forEach((header) => {
-          xhr.setRequestHeader(header, headers[header]);
-        });
-      }
-
-      if (method === METHODS.GET || method === METHODS.DELETE || !data) {
+      if (method === METHODS.GET || !data) {
         xhr.send();
-      } else {
+      } else if (data instanceof FormData) {
         xhr.send(data);
+      } else {
+        xhr.setRequestHeader('Content-type', 'application/json');
+        console.log(data);
+        xhr.send(JSON.stringify(data));
       }
 
       xhr.onload = () => {
@@ -72,3 +77,5 @@ class HTTPTransport {
     });
   };
 }
+
+export default HTTPTransport;

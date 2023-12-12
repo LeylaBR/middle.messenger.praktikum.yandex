@@ -27,7 +27,7 @@ const removeError = (el: HTMLInputElement) => {
 const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
   if (element.name === 'message' && !value) {
     element.classList.add('errorValidation');
-    return;
+    return null;
   }
 
   if (value || !element.required) {
@@ -57,6 +57,7 @@ export const inputEventListeners = (element: HTMLInputElement) => {
 
 export const submitForm = (form: HTMLElement) => {
   const inputs = form.querySelectorAll('input');
+  const errors = form.querySelectorAll('.error');
 
   let formData: any = {};
 
@@ -64,11 +65,13 @@ export const submitForm = (form: HTMLElement) => {
     let element: HTMLInputElement = input;
 
     fieldValidationCheck(element, element.value);
-    const errors = form.querySelectorAll('.error');
-    if (!errors.length && element) {
+
+    if (!errors.length && element && !!element.name) {
       formData[element.name] = element.value;
     }
   });
-
-  console.log(formData);
+  if (!errors.length) {
+    return formData;
+  }
+  return {};
 };

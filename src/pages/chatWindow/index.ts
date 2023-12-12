@@ -1,16 +1,10 @@
-import {
-  Avatar,
-  Button,
-  Input,
-  Layout,
-  Message,
-  UserItem,
-} from '../../components/index';
-
-import { messageData, userData } from './constants';
-import ChatWindows from './ChatWindow';
+import { Button, Input, Layout } from '../../components/index';
+import ChatWindows, { socket } from './ChatWindow';
 import { formIds, routes } from '../../constants';
 import { submitForm } from '../../utils/form';
+import store from '../../services/Store';
+import ChatAPI from '../../api/ChatAPI';
+import ChatController from '../../controllers/ChatController';
 
 const profileButton = new Button('button', {
   attr: {
@@ -21,7 +15,59 @@ const profileButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      window.location.href = routes.settings;
+
+      const state = store.getState().user;
+      if (state) {
+        window.location.href = routes.settings;
+      }
+    },
+  },
+});
+
+const newChatButton = new Button('button', {
+  attr: {
+    class: 'button',
+  },
+  label: 'Add new chat',
+  id: 'createChat',
+  events: {
+    click: (event: MouseEvent) => {
+      event.preventDefault();
+      const titleChatInput = document.getElementById(
+        'addChat'
+      ) as HTMLInputElement;
+      const createChatButton = document.getElementById(
+        'createChatButton'
+      ) as HTMLButtonElement;
+      createChatButton.classList.remove('hide');
+      createChatButton.classList.add('button');
+      titleChatInput.classList.remove('hide');
+      titleChatInput.classList.add('input');
+      const regApi = new ChatAPI();
+      const regApiController = new ChatController();
+
+      createChatButton.addEventListener('click', (e) => {
+        if (titleChatInput.value) {
+          const data = {
+            title: titleChatInput.value,
+          };
+
+          regApi
+            .createChat(data)
+            .then((data) => {
+              if (data.id) {
+                createChatButton.classList.add('hide');
+                createChatButton.classList.remove('button');
+                titleChatInput.classList.add('hide');
+                titleChatInput.classList.remove('input');
+                regApiController.getChats();
+              }
+            })
+            .catch((error) => {
+              console.error('Error:', error.message);
+            });
+        }
+      });
     },
   },
 });
@@ -41,43 +87,6 @@ const searchInput = new Input('div', {
   },
 });
 
-const getAvatar = () =>
-  new Avatar('div', {
-    attr: {
-      class: 'imageUser',
-    },
-  });
-
-const userItems = userData.map((user) => {
-  const { name, info } = user;
-
-  const block = new UserItem('div', {
-    attr: {
-      class: 'usersContainer',
-    },
-    avatar: getAvatar(),
-    name,
-    info,
-  });
-
-  return block;
-});
-
-const messages = messageData.map((message) => {
-  const { className, left, right, name, text, time } = message;
-  const messageBlock = new Message('span', {
-    avatar: getAvatar(),
-    className,
-    left,
-    right,
-    name,
-    text,
-    time,
-  });
-
-  return messageBlock;
-});
-
 const messageInput = new Input('div', {
   attr: {
     class: 'inputMessage',
@@ -88,11 +97,6 @@ const messageInput = new Input('div', {
   id: 'message',
   value: '',
   name: 'message',
-  events: {
-    input: () => {
-      console.log('message');
-    },
-  },
 });
 
 const sendButton = new Button('button', {
@@ -103,8 +107,22 @@ const sendButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
+
       const form: any = document.getElementById(formIds.message);
-      submitForm(form);
+      const input: any = document.getElementById('message');
+      const validMessage = submitForm(form);
+
+      if (validMessage.message) {
+        try {
+          socket.send({
+            type: 'message',
+            content: validMessage.message,
+          });
+          input.value = '';
+        } catch (error) {
+          console.error('Error connecting to WebSocket:', error);
+        }
+      }
     },
   },
 });
@@ -115,8 +133,7 @@ const chatWindow = new ChatWindows('div', {
   },
   profileButton,
   searchInput,
-  userItems,
-  messages,
+  newChatButton,
   messageInput,
   sendButton,
   idForm: formIds.message,

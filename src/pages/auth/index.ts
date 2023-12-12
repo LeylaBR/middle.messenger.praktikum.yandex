@@ -5,6 +5,8 @@ import { authInputsData } from './constants';
 import Auth from './Auth';
 import { formIds, routes } from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
+import { isEmpty } from '../../services/utils';
+import AuthAPI from '../../api/AuthAPI';
 
 const authInputs = authInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
@@ -40,7 +42,21 @@ const loginButton = new Button('button', {
       const form: HTMLElement = document.getElementById(
         formIds.auth
       ) as HTMLElement;
-      submitForm(form);
+      const body = submitForm(form);
+      if (!isEmpty(body)) {
+        const regApi = new AuthAPI();
+        regApi
+          .create(body)
+          .then((data) => {
+            if (data === 'OK') {
+              localStorage.setItem('currentUser', 'true');
+              window.location.href = routes.chat;
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error.message);
+          });
+      }
     },
   },
 });
@@ -53,7 +69,17 @@ const registrationButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
+      // const regApi = new AuthAPI();
+      // regApi
+      //   .logout()
+      //   .then((data) => {
+      //     if (data === 'OK') {
       window.location.href = routes.registration;
+      //   }
+      // })
+      // .catch((error) => {
+      //   console.error('Error:', error.message);
+      // });
     },
   },
 });
