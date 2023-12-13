@@ -1,14 +1,18 @@
 @import "/src/styles/_variables.scss";
 
+
+.button, .buttonLink, .deleteButton {
+    border-radius: 0.2rem;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
 .button {
     color: $white;
     background-color: $blue;
-    border-radius: 0.2rem;
-    border: none;
     padding: 0.3rem 1rem;
     min-width: 100px;
-    cursor: pointer;
-    text-align: center;
 
     &:hover {
         background-color: $grayBlue;
@@ -16,8 +20,11 @@
 }
 
 .buttonLink {
-    border: none;
     color: $dustyBlue;
     background: transparent;
-    cursor: pointer;
+}
+
+.deleteButton {
+    background-color: transparent;
+    color: red;
 }

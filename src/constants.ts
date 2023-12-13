@@ -12,6 +12,16 @@ export const routes = {
   auth: '/',
   registration: '/registration',
   chat: '/chat',
+  settingsChat: `/chat/settings/:id`,
   settings: '/settings',
   serverError: '/500',
 };
+
+export const routesList = [
+  '/',
+  '/registration',
+  '/chat',
+  '/settings',
+  '/500',
+  `/chat/settings/:id`,
+];

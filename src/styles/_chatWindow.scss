@@ -9,13 +9,12 @@
 }
 
 .usersBlock,
-.messageHeader,
 .messageInput,
 .messageHeader {
     background-color: $darkGray;
 }
 
-.usersBlock {
+.usersBlock, .usersBlockSettings {
     width: 30%;
     padding: 8px;
     display: flex;
@@ -36,6 +35,11 @@
     justify-content: space-between;
 }
 
+.createChatContainer {
+    display: flex;
+    gap: 10px;
+}
+
 .messageBlock {
     flex: 1;
     display: flex;
@@ -50,12 +54,17 @@
 
 .messageHeader {
     height: 50px;
-    color: $dustyBlue;
+    color: #7f91a4;
     font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.infoChat {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 8px;
 }
 
 .messageLine {
@@ -65,6 +74,7 @@
     justify-content: flex-end;
     gap: 1rem;
     padding: 8px;
+    overflow-Y: scroll;
 }
 
 .messageDate {
@@ -83,19 +93,30 @@
     }
 }
 
+
+
 .inputSearch,
-.inputMessage {
+.inputMessage, .select{
     background-color: transparent;
     border: none;
     color: $white;
 }
 
-.inputSearch {
-    width: 96%;
-    height: 100%;
+.select, .inputSearch {
     border-radius: 5px;
     background-color: $black;
     padding: 0 4px;
+}
+
+.select {
+    width: 170px;
+    height: 25px;
+}
+
+.inputSearch {
+    width: 96%;
+    height: 100%;
+
 }
 
 .inputMessage {
