@@ -1,10 +1,10 @@
 import { getAvatar } from '../utils';
 import { Button, Input, Layout, Select } from '../../components';
 import SettingsChatPage from './SettingsChatPage';
-import SettingsAPI from '../../api/SettingsAPI';
 import { routes } from '../../constants';
 import ChatAPI from '../../api/ChatAPI';
 import ChatController from '../../controllers/ChatController';
+import { avatarId } from './constants';
 
 const searchInput = new Input('div', {
   className: 'inputSearch',
@@ -17,12 +17,23 @@ const searchInput = new Input('div', {
       event.preventDefault();
       const { value }: any = event.target;
       const select = document.getElementById('searchUser') as HTMLInputElement;
+      const button = document.getElementById('addMemeber') as HTMLButtonElement;
 
       const regApi = new ChatAPI();
 
       if (!value) {
         select.classList.add('hide');
         select.classList.remove('select');
+        button.classList.add('hide');
+        button.classList.remove('button');
+        select.innerHTML = '';
+      }
+
+      if (value) {
+        select.classList.remove('hide');
+        select.classList.add('select');
+        button.classList.remove('hide');
+        button.classList.add('button');
       }
 
       regApi.searchUsers(value).then((res) => {
@@ -35,8 +46,7 @@ const searchInput = new Input('div', {
 
             fragment.appendChild(option);
           });
-          select.classList.remove('hide');
-          select.classList.add('select');
+
           if (fragment.children.length) {
             select.appendChild(fragment);
           } else {
@@ -57,10 +67,10 @@ const searchSelect = new Select('div', {
 
 const newMemberButton = new Button('button', {
   attr: {
-    class: 'button',
+    class: 'hide',
+    id: 'addMemeber',
   },
   label: 'Add new memeber',
-  id: 'addMemeber',
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
@@ -71,6 +81,7 @@ const newMemberButton = new Button('button', {
       const chatId = Number(pathParts[pathParts.length - 1]);
       const select = document.getElementById('searchUser') as HTMLSelectElement;
       const userId = Number(select.value);
+
       if (userId && chatId) {
         const data = {
           users: [userId],
@@ -94,21 +105,25 @@ const fileButton = new Button('button', {
   events: {
     click: (event: any) => {
       event.preventDefault();
+      const pathParts = window.location.pathname.split('/');
+      const chatId = Number(pathParts[pathParts.length - 1]);
       const input = document.createElement('input');
-      const imgElement = document.getElementById('avatar') as HTMLImageElement;
+      const imgElement = document.getElementById(avatarId) as HTMLImageElement;
 
       input.type = 'file';
-      input.onchange = (_) => {
-        const { files }: any = event.target;
+      input.onchange = (e: Event) => {
+        const { files }: any = e.target;
 
         if (files.length > 0) {
           const reader: FileReader = new FileReader();
           const formData: FormData = new FormData();
           formData.append('avatar', files[0]);
+          formData.append('chatId', String(chatId));
 
           reader.onload = function handleFileLoad(e: any) {
-            const regApi = new SettingsAPI();
-            regApi.uploadAvatar(formData);
+            const regApi = new ChatController();
+
+            regApi.uploadChatAvatar(formData);
 
             imgElement.src = e.target.result;
           };
@@ -139,7 +154,7 @@ const settingsChat = new SettingsChatPage('div', {
   attr: {
     class: 'page',
   },
-  avatar: getAvatar(),
+  avatar: getAvatar(avatarId),
   searchInput,
   searchSelect,
   fileButton,

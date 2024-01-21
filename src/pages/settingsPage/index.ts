@@ -1,10 +1,11 @@
 import { Button, Input, Layout } from '../../components/index';
-import { settingsInputsData } from './constants';
+import { avatarId, settingsInputsData } from './constants';
 import SettingsPage from './SettingsPage';
 import { formIds, routes } from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
 import AuthAPI from '../../api/AuthAPI';
 import SettingsAPI from '../../api/SettingsAPI';
+import UserController from '../../controllers/UserController';
 import { getAvatar } from '../utils';
 
 const settingsInputs = settingsInputsData.map((inputData) => {
@@ -37,11 +38,11 @@ const fileButton = new Button('button', {
     click: (event: any) => {
       event.preventDefault();
       const input = document.createElement('input');
-      const imgElement = document.getElementById('avatar') as HTMLImageElement;
+      const imgElement = document.getElementById(avatarId) as HTMLImageElement;
 
       input.type = 'file';
-      input.onchange = (_) => {
-        const { files }: any = event.target;
+      input.onchange = (e: Event) => {
+        const { files }: any = e.target;
 
         if (files.length > 0) {
           const reader: FileReader = new FileReader();
@@ -49,7 +50,8 @@ const fileButton = new Button('button', {
           formData.append('avatar', files[0]);
 
           reader.onload = function handleFileLoad(e: any) {
-            const regApi = new SettingsAPI();
+            const regApi = new UserController();
+
             regApi.uploadAvatar(formData);
 
             imgElement.src = e.target.result;
@@ -101,7 +103,7 @@ const saveButton = new Button('button', {
         oldPassword,
         newPassword,
       };
-      if ((formValue.oldPassword === '' && formValue, newPassword === '')) {
+      if (formValue.oldPassword === '' && formValue && newPassword === '') {
         regApi.updateProfile(dataProfile);
       } else {
         regApi.updateProfile(dataProfile);
@@ -152,8 +154,8 @@ const settings = new SettingsPage('div', {
   attr: {
     class: 'page',
   },
-  avatar: getAvatar(),
   idForm: formIds.settings,
+  avatar: getAvatar(avatarId),
   fileButton,
   cancelButton,
   saveButton,

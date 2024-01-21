@@ -57,13 +57,14 @@ export const inputEventListeners = (element: HTMLInputElement) => {
 
 export const submitForm = (form: HTMLElement) => {
   const inputs = form.querySelectorAll('input');
-  const errors = form.querySelectorAll('.error');
+  let errors: NodeListOf<Element> | [] = [];
 
   let formData: any = {};
 
   inputs.forEach((input) => {
     let element: HTMLInputElement = input;
-
+    const errorsList = form.querySelectorAll('.error');
+    errors = errorsList;
     fieldValidationCheck(element, element.value);
 
     if (!errors.length && element && !!element.name) {

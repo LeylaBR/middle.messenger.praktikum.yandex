@@ -63,3 +63,5 @@ export const settingsInputsData = [
     value: null,
   },
 ];
+
+export const avatarId = 'avatarProfile';

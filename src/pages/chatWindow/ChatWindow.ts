@@ -1,156 +1,266 @@
 import Block from '../../services';
 import { template } from './template';
-import { TagNameComponent } from '../../components/types';
 import { connect } from '../../services/Connect';
-
 import UserController from '../../controllers/UserController';
 import ChatController from '../../controllers/ChatController';
-import { getAvatar } from '../utils';
+import { getAvatar, getAvatarPath } from '../utils';
 import WSTransport from '../../services/WebSocket';
-import { Message, UserItem } from '../../components';
+import { Button, Message, UserItem } from '../../components';
+import { formIds } from '../../constants';
+import { submitForm } from '../../utils/form';
+import {
+  getTime,
+  scrollHandler,
+  settingsChatButtonHandler,
+  setUsersAvatar,
+} from './utils';
+import { ChatInfo, ChatWindowsProps } from './types';
+import ChatAPI from '../../api/ChatAPI';
 
-export const socket = new WSTransport();
-
-interface ChatWindowsProps extends TagNameComponent {
-  props: any;
-  profileButton: any;
-  searchInput: any;
-  userItems: any;
-  messageInput: any;
-  sendButton: any;
-  idForm: any;
-  newChatButton: any;
-  chats: any;
-  user: any;
-  chatUsers: any;
-  messages: any;
-}
+const regApiChat = new ChatController();
 
 function mapChatToProps(state: any) {
   return {
     chats: state.chats,
     user: state.user,
-    chatUsers: state.chatUsers,
+    tokens: state.tokens,
+    usersAvatar: state.usersAvatar,
     messages: state.messages,
   };
 }
 
 class ChatWindows extends Block<ChatWindowsProps> {
+  private myId: null | number;
+  private socket: WSTransport;
+  private chatAvatars: Record<string, string>;
+  private usersAvatarPath: {} | Record<number, string>;
+
   constructor(tagName: string, props: any) {
     super(tagName, props);
     this.getData();
+    this.initSendButton();
+    this.chatAvatars = {};
+    this.myId = null;
+    this.socket = new WSTransport();
+    this.usersAvatarPath = {};
   }
 
-  initChats(data: any) {
-    const chatsList = data ? data.data : [];
+  closeSocket() {
+    if (this.socket) {
+      this.socket.close();
+      this.socket = new WSTransport();
+    }
+  }
+
+  getChatsAvatar() {
+    Object.entries(this.chatAvatars).map(([key, value]) => {
+      if (value) {
+        setUsersAvatar(value, key);
+      }
+    });
+  }
+
+  initChats(data?: ChatInfo[]) {
+    const chatsList = data ? data : [];
 
     if (chatsList.length) {
       const chats = chatsList.map((chat: Record<string, any>) => {
         const { title: name, avatar, last_message: info, id } = chat;
-        const regApiChat = new ChatController();
-
-        regApiChat.getToken(id).then((token: string) => {
-          (this.props as any)[`token_${id}`] = token;
-        });
+        const avatarId = `avatar_${id}`;
 
         const block = new UserItem('div', {
           attr: {
             class: 'usersContainer',
           },
-          avatar: !!avatar ? getAvatar(avatar) : getAvatar(),
+          avatar: getAvatar(avatarId),
           name,
           info: info ? info.content : '',
           id,
           events: {
             click: async (event: any) => {
               event.preventDefault();
-
-              const nameChat = document.getElementById('chatName');
-              const chatSettings = document.getElementById('chatSettings');
-              const token: string = (this.props as any)[`token_${id}`];
-              const userId: string = this.props.user.id;
-
-              if (chatSettings) {
-                chatSettings.addEventListener('click', () => {
-                  event.preventDefault();
-                  window.location.href = `/chat/settings/${id}`;
-                });
-              }
+              this.usersAvatarPath = {};
+              this.myId = this.props.user.id;
+              const token: string = this.props.tokens[id];
 
               try {
-                await socket.connect(userId, id, token);
-                socket.send({
-                  type: 'get old',
-                  content: 0,
-                });
+                if (this.myId) {
+                  this.closeSocket();
+                  await this.socket.connect(this.myId, id, token);
 
-                if (nameChat) {
-                  nameChat.textContent = name;
-                }
+                  this.socket.send({
+                    type: 'get old',
+                    content: 0,
+                  });
 
-                if (chatSettings) {
-                  chatSettings.classList.remove('hide');
-                  chatSettings.classList.add('buttonLink');
-                }
-
-                if (event.target && event.target.id === 'deleteButton') {
-                  regApiChat.deleteChats(id);
+                  this.socket.on(WSTransport.EVENTS.MESSAGE, (data: any) => {
+                    this.renderMessages(this.myId, data);
+                    settingsChatButtonHandler(id, name);
+                  });
                 }
               } catch (error: any) {
                 console.error('Error connecting to WebSocket:', error);
               }
+
+              try {
+                if (event.target && event.target.id === 'deleteButton') {
+                  const regApiController = new ChatController();
+                  regApiChat.deleteChats(id);
+                  regApiController.getChats().then((chats: ChatInfo[]) => {
+                    this.initChats(chats);
+                  });
+                }
+              } catch (error) {
+                console.error('Произошла ошибка:', error);
+              }
             },
           },
         });
+        this.chatAvatars[avatarId] = avatar;
 
         return block;
       });
 
       this.lists.userItems = chats;
+
+      this.getChatsAvatar();
     }
   }
 
-  renderMessages(user: any, data: any) {
-    const myId = user?.id;
-    const listMessages = data?.data;
-    if (myId && listMessages) {
-      const messages = listMessages.map((message: Record<string, any>) => {
-        const { user_id, content } = message;
-        const myMessage: boolean = myId === user_id;
+  initSendButton() {
+    const sendButton = new Button('button', {
+      attr: {
+        class: 'button',
+      },
+      label: 'Отправить',
+      events: {
+        click: (event: MouseEvent) => {
+          event.preventDefault();
 
-        return new Message('span', {
-          avatar: getAvatar(),
-          className: myMessage ? 'massageRight' : 'massageLeft',
-          left: !myMessage,
-          right: myMessage,
-          name: '',
-          text: content,
-          time: '12:15',
-        });
-      });
+          const form: any = document.getElementById(formIds.message);
+          const input: any = document.getElementById('message');
 
-      this.lists.messages = messages.reverse();
-    }
+          const validMessage = submitForm(form);
+
+          if (validMessage.message) {
+            try {
+              this.socket.send({
+                type: 'message',
+                content: validMessage.message,
+              });
+
+              input.value = '';
+            } catch (error) {
+              console.error('Error connecting to WebSocket:', error);
+            }
+          }
+        },
+      },
+    });
+
+    this.children.sendButton = sendButton;
   }
 
-  getData() {
+  getMessage(message: Message, myId: number | null) {
+    const usersAvatar = this.props.usersAvatar;
+    const { user_id, content, time } = message;
+    const myMessage: boolean = Number(myId) === Number(user_id);
+
+    return new Message('span', {
+      avatar: usersAvatar[user_id]
+        ? getAvatarPath(usersAvatar[user_id], user_id)
+        : getAvatar(user_id),
+      className: myMessage ? 'massageRight' : 'massageLeft',
+      left: !myMessage,
+      right: myMessage,
+      name: '',
+      text: content,
+      time: getTime(time),
+    });
+  }
+
+  renderMessages(myId: number | null, listMessages: Message[]) {
+    if (Array.isArray(listMessages)) {
+      const messages = listMessages
+        .map((message: Message) => {
+          return this.getMessage(message, myId);
+        })
+        .reverse();
+
+      this.setProps({ messages });
+    } else {
+      const message = this.getMessage(listMessages, myId);
+
+      this.setProps({ messages: [...this.lists.messages, message] });
+    }
+    scrollHandler();
+  }
+
+  initNewChatButton() {
+    const newChatButton = new Button('button', {
+      attr: {
+        class: 'button',
+      },
+      label: 'Add new chat',
+      id: 'createChat',
+      events: {
+        click: (event: MouseEvent) => {
+          event.preventDefault();
+          const titleChatInput = document.getElementById('addChat') as any;
+          const createChatButton = document.getElementById(
+            'createChatButton'
+          ) as HTMLButtonElement;
+          createChatButton.classList.remove('hide');
+          createChatButton.classList.add('button');
+          titleChatInput.classList.remove('hide');
+          titleChatInput.classList.add('input');
+          const regApi = new ChatAPI();
+          const regApiController = new ChatController();
+
+          createChatButton.addEventListener('click', () => {
+            if (titleChatInput.value) {
+              const dataToServer = {
+                title: titleChatInput.value,
+              };
+
+              regApi
+                .createChat(dataToServer)
+                .then((data) => {
+                  if (data.id) {
+                    createChatButton.classList.add('hide');
+                    createChatButton.classList.remove('button');
+                    titleChatInput.classList.add('hide');
+                    titleChatInput.classList.remove('input');
+                    regApiController.getChats().then((chats: ChatInfo[]) => {
+                      this.initChats(chats);
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.error('Error:', error.message);
+                });
+            }
+          });
+        },
+      },
+    });
+    this.children.newChatButton = newChatButton;
+  }
+
+  async getData() {
     const regApi = new UserController();
     regApi.getUser();
-    const regApiChat = new ChatController();
-    regApiChat.getChats();
+    const chatData: any = await regApiChat.getChats();
+    this.initChats(chatData);
+    this.initNewChatButton();
   }
 
   render() {
-    this.initChats(this.props.chats);
-    this.renderMessages(this.props.user, this.props.messages);
-
     return this.compile(template, {
       ...this.props,
       profileButton: this.props.profileButton,
       searchInput: this.props.searchInput,
-      newChatButton: this.props.newChatButton,
       messageInput: this.props.messageInput,
-      sendButton: this.props.sendButton,
     });
   }
 }

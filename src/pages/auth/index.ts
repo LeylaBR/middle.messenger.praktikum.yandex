@@ -1,7 +1,5 @@
 import { Button, Input, Layout } from '../../components/index';
-
 import { authInputsData } from './constants';
-
 import Auth from './Auth';
 import { formIds, routes } from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
@@ -10,7 +8,7 @@ import AuthAPI from '../../api/AuthAPI';
 
 const authInputs = authInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
-  const input = new Input('div', {
+  return new Input('div', {
     attr: {
       class: 'inputContainer',
     },
@@ -27,8 +25,6 @@ const authInputs = authInputsData.map((inputData) => {
       },
     },
   });
-
-  return input;
 });
 
 const loginButton = new Button('button', {
@@ -39,23 +35,17 @@ const loginButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      const form: HTMLElement = document.getElementById(
-        formIds.auth
-      ) as HTMLElement;
-      const body = submitForm(form);
-      if (!isEmpty(body)) {
+      const form = document.getElementById(formIds.auth) as HTMLElement;
+      const fieldData = submitForm(form);
+
+      if (!isEmpty(fieldData)) {
         const regApi = new AuthAPI();
-        regApi
-          .signin(body)
-          .then((data) => {
-            if (data === 'OK') {
-              localStorage.setItem('currentUser', 'true');
-              window.location.href = routes.chat;
-            }
-          })
-          .catch((error) => {
-            console.error('Error:', error.message);
-          });
+        regApi.signin(fieldData).then((data) => {
+          if (data === 'OK') {
+            localStorage.setItem('currentUser', 'true');
+            window.location.href = routes.chat;
+          }
+        });
       }
     },
   },
@@ -69,17 +59,7 @@ const registrationButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      // const regApi = new AuthAPI();
-      // regApi
-      //   .logout()
-      //   .then((data) => {
-      //     if (data === 'OK') {
       window.location.href = routes.registration;
-      //   }
-      // })
-      // .catch((error) => {
-      //   console.error('Error:', error.message);
-      // });
     },
   },
 });

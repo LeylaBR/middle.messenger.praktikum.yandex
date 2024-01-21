@@ -58,7 +58,6 @@ class HTTPTransport {
         xhr.send(data);
       } else {
         xhr.setRequestHeader('Content-type', 'application/json');
-        console.log(data);
         xhr.send(JSON.stringify(data));
       }
 

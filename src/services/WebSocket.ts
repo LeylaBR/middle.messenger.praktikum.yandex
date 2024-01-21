@@ -1,5 +1,4 @@
 import EventBus from './EventBus';
-import store from './Store';
 
 class WSTransport extends EventBus {
   static EVENTS = {
@@ -30,7 +29,7 @@ class WSTransport extends EventBus {
     this.socket.send(JSON.stringify(data));
   }
 
-  public connect(userId: string, chatId: string, token: string): Promise<void> {
+  public connect(userId: number, chatId: string, token: string): Promise<void> {
     if (this.socket) {
       throw new Error('Already connected');
     }
@@ -81,12 +80,14 @@ class WSTransport extends EventBus {
     socket.addEventListener('message', (message) => {
       try {
         const data = JSON.parse(message.data);
-        store.set('messages', { data });
+
         if (['pong', 'user connected'].includes(data?.type)) {
           return;
         }
+
         this.emit(WSTransport.EVENTS.MESSAGE, data);
       } catch (e: any) {
+        console.log(e);
         console.log(e.message);
       }
     });

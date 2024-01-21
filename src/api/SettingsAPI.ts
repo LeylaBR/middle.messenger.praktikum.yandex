@@ -1,5 +1,6 @@
 import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
+import { showError } from './utils';
 
 const chatAPIInstance = new HTTP();
 const host = 'https://ya-praktikum.tech/api/v2';
@@ -26,7 +27,61 @@ class SettingsAPI extends Base {
 
     return chatAPIInstance
       .put(`${host}/user/profile/avatar`, options)
-      .then((responseData: any) => responseData.response);
+      .then((response) => {
+        if (response.status === 200) {
+          return response.response;
+        }
+
+        throw new Error(response.status);
+      })
+      .then((data: string) => {
+        const res = JSON.parse(data);
+        if (res.avatar) {
+          return this.getAvatarStatic(res.avatar);
+        }
+      })
+      .catch((error) => {
+        if (error instanceof Error && error.message) {
+          showError(error.message);
+        } else {
+          showError('Image Too Large');
+        }
+      });
+  }
+
+  uploadChatAvatar(avatarData: FormData) {
+    const options = {
+      data: avatarData,
+    };
+
+    return chatAPIInstance
+      .put(`${host}/chats/avatar`, options)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.response;
+        }
+
+        throw new Error(response.status);
+      })
+      .then((data: string) => {
+        const res = JSON.parse(data);
+        if (res.avatar) {
+          return this.getAvatarStatic(res.avatar);
+        }
+      })
+      .catch((error) => {
+        if (error instanceof Error && error.message) {
+          showError(error.message);
+        } else {
+          showError('Image Too Large');
+        }
+      });
+  }
+
+  getAvatarStatic(path: string) {
+    return chatAPIInstance
+      .get(`${host}/resources${path}`)
+      .then((responseData: any) => responseData.responseURL);
   }
 
   updateProfile(profileData: UpdateProfileArgs) {

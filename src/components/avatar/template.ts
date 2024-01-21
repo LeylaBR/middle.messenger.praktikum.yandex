@@ -1,3 +1,3 @@
 export const template = `
-    <img src="{{path}}" id="avatar" alt="noAvatar">
+    <img src="{{path}}" id="{{id}}" alt="noAvatar">
 `;

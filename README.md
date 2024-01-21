@@ -31,6 +31,9 @@
   Сайт https://subtle-haupia-539448.netlify.app/
 
 - https://subtle-haupia-539448.netlify.app/ страница авторизации
-- https://subtle-haupia-539448.netlify.app/src/pages/registration/registration страница регистрации
-- https://subtle-haupia-539448.netlify.app/src/pages/chatwindow/chatwindow страница чата
-- https://subtle-haupia-539448.netlify.app/src/pages/settingspage/settingspage страница настройки профиля
+- https://subtle-haupia-539448.netlify.app/registration страница регистрации
+- https://subtle-haupia-539448.netlify.app/chat страница чата
+- https://subtle-haupia-539448.netlify.app/chat/settings/:id страница настройки чата
+- https://subtle-haupia-539448.netlify.app/settings страница настройки профиля
+- https://subtle-haupia-539448.netlify.app/500 страница serverError
+- https://subtle-haupia-539448.netlify.app/404 или не описанная выше страница notFound

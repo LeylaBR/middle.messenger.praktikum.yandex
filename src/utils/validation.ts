@@ -27,6 +27,4 @@ export const validationForm = (name: string, value: string) => {
     default:
       return true;
   }
-
-  return true;
 };
