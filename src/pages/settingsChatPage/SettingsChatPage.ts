@@ -42,16 +42,16 @@ class SettingsChatPage extends Block<SettingsChatProps> {
 
     if (this.props.chats && img) {
       const currentChat = this.props.chats.data.find(
-        (chat) => chat.id === this.chatId
+        (chat: any) => chat.id === this.chatId
       );
 
-      setAvatar(currentChat.avatar).then((ava) => {
+      setAvatar(currentChat?.avatar).then((ava) => {
         img.src = ava;
       });
     }
   }
 
-  async setUsersAvatar(avatar) {
+  async setUsersAvatar(avatar: string) {
     let ava = '';
 
     if (avatar) {

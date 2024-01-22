@@ -18,7 +18,7 @@ class AuthAPI extends Base {
 
     return chatAPIInstance
       .post(`${host}/auth/signin`, options)
-      .then((response) => {
+      .then((response: any) => {
         if (response.status === 200) {
           return response.response;
         }

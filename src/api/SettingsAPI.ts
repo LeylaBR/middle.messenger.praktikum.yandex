@@ -20,10 +20,10 @@ interface UpdatePasswordArg {
 }
 
 class SettingsAPI extends Base {
-  getAvatar(path, options) {
+  getAvatar(path: string, options: any) {
     return chatAPIInstance
       .put(`${host}${path}`, options)
-      .then((response) => {
+      .then((response: any) => {
         if (response.status === 200) {
           return response.response;
         }

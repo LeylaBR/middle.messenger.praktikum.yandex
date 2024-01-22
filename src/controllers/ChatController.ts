@@ -8,9 +8,9 @@ const settingsApi = new SettingsAPI();
 class ChatController {
   public getChats() {
     return chatApi.getChats().then((data) => {
-      data.forEach((el) => {
+      data.forEach((el: any) => {
         chatApi.getChatUsers(el.id).then((chat) => {
-          chat.forEach((user) => {
+          chat.forEach((user: any) => {
             this.getUsersAvatar(user.id, user.avatar);
           });
         });
@@ -23,7 +23,7 @@ class ChatController {
 
   public async getUsersAvatar(chatId: string, path: string) {
     if (path) {
-      return settingsApi.getAvatarStatic(path).then((data) => {
+      return settingsApi.getAvatarStatic(path).then((data: any) => {
         const { usersAvatar } = store.getState();
         store.set(`usersAvatar`, { ...usersAvatar, [chatId]: data });
       });
@@ -32,20 +32,20 @@ class ChatController {
   }
 
   public async getToken(chatId: string) {
-    return chatApi.getToken(chatId).then((data) => {
+    return chatApi.getToken(chatId).then((data: { token: string }) => {
       const { tokens } = store.getState();
       store.set(`tokens`, { ...tokens, [chatId]: data.token });
     });
   }
 
   public getChatUsers(id: number) {
-    chatApi.getChatUsers(id).then((data) => {
+    chatApi.getChatUsers(id).then((data: any) => {
       store.set('chatUsers', { data });
     });
   }
 
   public uploadChatAvatar(avatarData: any) {
-    settingsApi.uploadChatAvatar(avatarData).then((data) => {
+    settingsApi.uploadChatAvatar(avatarData).then((data: any) => {
       store.set('chatAvatar', data);
     });
   }

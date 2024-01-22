@@ -14,7 +14,7 @@ import {
   settingsChatButtonHandler,
   setUsersAvatar,
 } from './utils';
-import { ChatInfo, ChatWindowsProps } from './types';
+import { ChatInfo, ChatWindowsProps, MessageInfo } from './types';
 import ChatAPI from '../../api/ChatAPI';
 
 const regApiChat = new ChatController();
@@ -36,8 +36,6 @@ class ChatWindows extends Block<ChatWindowsProps> {
 
   private chatAvatars: Record<string, string>;
 
-  private usersAvatarPath: {} | Record<number, string>;
-
   constructor(tagName: string, props: any) {
     super(tagName, props);
     this.getData();
@@ -45,7 +43,6 @@ class ChatWindows extends Block<ChatWindowsProps> {
     this.chatAvatars = {};
     this.myId = null;
     this.socket = new WSTransport();
-    this.usersAvatarPath = {};
   }
 
   closeSocket() {
@@ -82,9 +79,8 @@ class ChatWindows extends Block<ChatWindowsProps> {
           events: {
             click: async (event: any) => {
               event.preventDefault();
-              this.usersAvatarPath = {};
               this.myId = this.props.user.id;
-              const token: string = this.props.tokens[id];
+              const token: any = this.props.tokens[id];
 
               try {
                 if (this.myId) {
@@ -164,7 +160,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
     this.children.sendButton = sendButton;
   }
 
-  getMessage(message: Message, myId: number | null) {
+  getMessage(message: MessageInfo, myId: number | null) {
     const { usersAvatar } = this.props;
     const { user_id, content, time } = message;
     const myMessage: boolean = Number(myId) === Number(user_id);
@@ -182,10 +178,10 @@ class ChatWindows extends Block<ChatWindowsProps> {
     });
   }
 
-  renderMessages(myId: number | null, listMessages: Message[]) {
+  renderMessages(myId: number | null, listMessages: MessageInfo[]) {
     if (Array.isArray(listMessages)) {
       const messages = listMessages
-        .map((message: Message) => this.getMessage(message, myId))
+        .map((message: MessageInfo) => this.getMessage(message, myId))
         .reverse();
 
       this.setProps({ messages });

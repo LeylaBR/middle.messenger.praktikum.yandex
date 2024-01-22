@@ -33,7 +33,7 @@ export interface ChatInfo {
   unread_count: number;
 }
 
-export interface Message {
+export interface MessageInfo {
   chat_id: number;
   content: string;
   file: null | any;

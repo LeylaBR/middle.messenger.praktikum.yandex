@@ -1,7 +1,7 @@
 import { Avatar } from '../components';
 import SettingsAPI from '../api/SettingsAPI';
 
-export const getAvatar = (id = 'avatar') =>
+export const getAvatar = (id: number | string = 'avatar') =>
   new Avatar('div', {
     attr: {
       class: 'imageUser',
@@ -10,7 +10,7 @@ export const getAvatar = (id = 'avatar') =>
     id,
   });
 
-export const getAvatarPath = (path: string, id: string | number) =>
+export const getAvatarPath = (path: any, id: string | number) =>
   new Avatar('div', {
     attr: {
       class: 'imageUser',
@@ -49,5 +49,5 @@ export const setAvatar = (path: string) => {
       console.error('Error fetching avatar:', error);
     }
   }
-  return null;
+  throw new Error('Error fetching avatar');
 };
