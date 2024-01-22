@@ -120,12 +120,12 @@ const fileButton = new Button('button', {
           formData.append('avatar', files[0]);
           formData.append('chatId', String(chatId));
 
-          reader.onload = function handleFileLoad(e: any) {
+          reader.onload = function handleFileLoad(ev: any) {
             const regApi = new ChatController();
 
             regApi.uploadChatAvatar(formData);
 
-            imgElement.src = e.target.result;
+            imgElement.src = ev.target.result;
           };
 
           reader.readAsDataURL(files[0]);

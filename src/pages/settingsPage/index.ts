@@ -41,8 +41,8 @@ const fileButton = new Button('button', {
       const imgElement = document.getElementById(avatarId) as HTMLImageElement;
 
       input.type = 'file';
-      input.onchange = (e: Event) => {
-        const { files }: any = e.target;
+      input.onchange = (ev: Event) => {
+        const { files }: any = ev.target;
 
         if (files.length > 0) {
           const reader: FileReader = new FileReader();

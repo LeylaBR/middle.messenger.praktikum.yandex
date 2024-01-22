@@ -9,8 +9,8 @@ class ChatController {
   public getChats() {
     return chatApi.getChats().then((data) => {
       data.forEach((el) => {
-        chatApi.getChatUsers(el.id).then((data) => {
-          data.forEach((user) => {
+        chatApi.getChatUsers(el.id).then((chat) => {
+          chat.forEach((user) => {
             this.getUsersAvatar(user.id, user.avatar);
           });
         });
@@ -24,15 +24,16 @@ class ChatController {
   public async getUsersAvatar(chatId: string, path: string) {
     if (path) {
       return settingsApi.getAvatarStatic(path).then((data) => {
-        const usersAvatar = store.getState().usersAvatar;
+        const { usersAvatar } = store.getState();
         store.set(`usersAvatar`, { ...usersAvatar, [chatId]: data });
       });
     }
+    return null;
   }
 
   public async getToken(chatId: string) {
     return chatApi.getToken(chatId).then((data) => {
-      const tokens = store.getState().tokens;
+      const { tokens } = store.getState();
       store.set(`tokens`, { ...tokens, [chatId]: data.token });
     });
   }

@@ -41,7 +41,7 @@ export const getTime = (time: string) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  return hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+  return `${hours}:${minutes}`;
 };
 
 export const scrollHandler = () => {

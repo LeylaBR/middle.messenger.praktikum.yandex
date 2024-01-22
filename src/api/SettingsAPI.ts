@@ -20,13 +20,9 @@ interface UpdatePasswordArg {
 }
 
 class SettingsAPI extends Base {
-  uploadAvatar(avatarData: FormData) {
-    const options = {
-      data: avatarData,
-    };
-
+  getAvatar(path, options) {
     return chatAPIInstance
-      .put(`${host}/user/profile/avatar`, options)
+      .put(`${host}${path}`, options)
       .then((response) => {
         if (response.status === 200) {
           return response.response;
@@ -39,6 +35,7 @@ class SettingsAPI extends Base {
         if (res.avatar) {
           return this.getAvatarStatic(res.avatar);
         }
+        throw new Error('Loading error');
       })
       .catch((error) => {
         if (error instanceof Error && error.message) {
@@ -49,33 +46,19 @@ class SettingsAPI extends Base {
       });
   }
 
+  uploadAvatar(avatarData: FormData) {
+    const options = {
+      data: avatarData,
+    };
+    return this.getAvatar('/user/profile/avatar', options);
+  }
+
   uploadChatAvatar(avatarData: FormData) {
     const options = {
       data: avatarData,
     };
 
-    return chatAPIInstance
-      .put(`${host}/chats/avatar`, options)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.response;
-        }
-
-        throw new Error(response.status);
-      })
-      .then((data: string) => {
-        const res = JSON.parse(data);
-        if (res.avatar) {
-          return this.getAvatarStatic(res.avatar);
-        }
-      })
-      .catch((error) => {
-        if (error instanceof Error && error.message) {
-          showError(error.message);
-        } else {
-          showError('Image Too Large');
-        }
-      });
+    return this.getAvatar('/chats/avatar', options);
   }
 
   getAvatarStatic(path: string) {

@@ -19,9 +19,9 @@ interface CreateChatArgs {
 
 class ChatAPI extends Base {
   getUserInfo() {
-    return chatAPIInstance.get(`${host}/auth/user`).then((data: any) => {
-      return JSON.parse(data.response);
-    });
+    return chatAPIInstance
+      .get(`${host}/auth/user`)
+      .then((data: any) => JSON.parse(data.response));
   }
 
   getChats() {

@@ -31,8 +31,11 @@ function mapChatToProps(state: any) {
 
 class ChatWindows extends Block<ChatWindowsProps> {
   private myId: null | number;
+
   private socket: WSTransport;
+
   private chatAvatars: Record<string, string>;
+
   private usersAvatarPath: {} | Record<number, string>;
 
   constructor(tagName: string, props: any) {
@@ -53,7 +56,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
   }
 
   getChatsAvatar() {
-    Object.entries(this.chatAvatars).map(([key, value]) => {
+    Object.entries(this.chatAvatars).forEach(([key, value]) => {
       if (value) {
         setUsersAvatar(value, key);
       }
@@ -61,7 +64,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
   }
 
   initChats(data?: ChatInfo[]) {
-    const chatsList = data ? data : [];
+    const chatsList = data?.length ? data : [];
 
     if (chatsList.length) {
       const chats = chatsList.map((chat: Record<string, any>) => {
@@ -93,8 +96,8 @@ class ChatWindows extends Block<ChatWindowsProps> {
                     content: 0,
                   });
 
-                  this.socket.on(WSTransport.EVENTS.MESSAGE, (data: any) => {
-                    this.renderMessages(this.myId, data);
+                  this.socket.on(WSTransport.EVENTS.MESSAGE, (mess: any) => {
+                    this.renderMessages(this.myId, mess);
                     settingsChatButtonHandler(id, name);
                   });
                 }
@@ -106,8 +109,8 @@ class ChatWindows extends Block<ChatWindowsProps> {
                 if (event.target && event.target.id === 'deleteButton') {
                   const regApiController = new ChatController();
                   regApiChat.deleteChats(id);
-                  regApiController.getChats().then((chats: ChatInfo[]) => {
-                    this.initChats(chats);
+                  regApiController.getChats().then((newChats: ChatInfo[]) => {
+                    this.initChats(newChats);
                   });
                 }
               } catch (error) {
@@ -162,7 +165,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
   }
 
   getMessage(message: Message, myId: number | null) {
-    const usersAvatar = this.props.usersAvatar;
+    const { usersAvatar } = this.props;
     const { user_id, content, time } = message;
     const myMessage: boolean = Number(myId) === Number(user_id);
 
@@ -182,9 +185,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
   renderMessages(myId: number | null, listMessages: Message[]) {
     if (Array.isArray(listMessages)) {
       const messages = listMessages
-        .map((message: Message) => {
-          return this.getMessage(message, myId);
-        })
+        .map((message: Message) => this.getMessage(message, myId))
         .reverse();
 
       this.setProps({ messages });
