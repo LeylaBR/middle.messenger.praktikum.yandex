@@ -5,9 +5,9 @@ export const settingsChatButtonHandler = (id: number, name: string) => {
   const chatSettings = document.getElementById('chatSettings');
 
   if (chatSettings) {
-    chatSettings.addEventListener('click', (event) => {
+    chatSettings.addEventListener('click', (event: Event) => {
       event.preventDefault();
-      window.location.href = `/chat/settings/${id}`;
+      window.location.href = `/messenger/settings/${id}`;
     });
 
     chatSettings.classList.remove('hide');

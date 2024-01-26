@@ -13,7 +13,7 @@ const searchInput = new Input('div', {
   id: 'searchUsers',
   value: '',
   events: {
-    input: (event: any) => {
+    input: (event: Event) => {
       event.preventDefault();
       const { value }: any = event.target;
       const select = document.getElementById('searchUser') as HTMLInputElement;
@@ -103,7 +103,7 @@ const fileButton = new Button('button', {
   },
   label: 'Choose avatar',
   events: {
-    click: (event: any) => {
+    click: (event: Event) => {
       event.preventDefault();
       const pathParts = window.location.pathname.split('/');
       const chatId = Number(pathParts[pathParts.length - 1]);

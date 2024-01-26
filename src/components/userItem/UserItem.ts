@@ -10,7 +10,7 @@ interface Props {
 
 interface UserItemProps extends TagNameComponent {
   props: Props;
-  avatar: any;
+  avatar: unknown;
 }
 
 class UserItem extends Block<UserItemProps> {

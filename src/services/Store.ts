@@ -6,7 +6,7 @@ export enum StoreEvents {
 }
 
 class Store extends EventBus {
-  private state: any = {};
+  private state: unknown = {};
 
   public getState() {
     return this.state;

@@ -87,7 +87,6 @@ class WSTransport extends EventBus {
 
         this.emit(WSTransport.EVENTS.MESSAGE, data);
       } catch (e: any) {
-        console.log(e);
         console.log(e.message);
       }
     });

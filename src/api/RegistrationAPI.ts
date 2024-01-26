@@ -2,7 +2,6 @@ import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
 
 const chatAPIInstance = new HTTP();
-const host = 'https://ya-praktikum.tech/api/v2';
 
 interface SignupArgs {
   first_name: string;
@@ -20,8 +19,8 @@ class RegistrationAPI extends Base {
     };
 
     return chatAPIInstance
-      .post(`${host}/auth/signup`, options)
-      .then((data: any) => JSON.parse(data.response));
+      .post(`/auth/signup`, options)
+      .then((data: { id: number }) => data);
   }
 
   request() {

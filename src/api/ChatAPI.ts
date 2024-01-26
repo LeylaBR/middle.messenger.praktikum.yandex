@@ -1,45 +1,35 @@
 import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
+import {
+  AddDeleteUsersArgs,
+  ChatsInfo,
+  CreateChatArgs,
+  SearchUsersArgs,
+  TokenInfo,
+  UserInfo,
+} from './types';
 
 const chatAPIInstance = new HTTP();
-const host = 'https://ya-praktikum.tech/api/v2';
-
-interface AddDeleteUsersArgs {
-  users: number[];
-  chatId: number;
-}
-
-interface SearchUsersArgs {
-  login: string;
-}
-
-interface CreateChatArgs {
-  title: string;
-}
 
 class ChatAPI extends Base {
   getUserInfo() {
-    return chatAPIInstance
-      .get(`${host}/auth/user`)
-      .then((data: any) => JSON.parse(data.response));
+    return chatAPIInstance.get(`/auth/user`).then((data: UserInfo) => data);
   }
 
   getChats() {
-    return chatAPIInstance
-      .get(`${host}/chats`)
-      .then((data: any) => JSON.parse(data.response));
+    return chatAPIInstance.get(`/chats`).then((data: ChatsInfo[]) => data);
   }
 
-  getToken(chatId: string) {
+  getToken(chatId: number) {
     return chatAPIInstance
-      .post(`${host}/chats/token/${chatId}`)
-      .then((data: any) => JSON.parse(data.response));
+      .post(`/chats/token/${chatId}`)
+      .then((data: TokenInfo) => data);
   }
 
   getChatUsers(id: number) {
     return chatAPIInstance
-      .get(`${host}/chats/${id}/users`)
-      .then((data: any) => JSON.parse(data.response));
+      .get(`/chats/${id}/users`)
+      .then((data: UserInfo[]) => data);
   }
 
   addUser(userData: AddDeleteUsersArgs) {
@@ -48,8 +38,8 @@ class ChatAPI extends Base {
     };
 
     return chatAPIInstance
-      .put(`${host}/chats/users`, options)
-      .then((data: any) => data.response);
+      .put(`/chats/users`, options)
+      .then((data: { response: UserInfo[] }) => data.response);
   }
 
   deleteUsers(userData: AddDeleteUsersArgs) {
@@ -58,7 +48,7 @@ class ChatAPI extends Base {
     };
 
     return chatAPIInstance
-      .delete(`${host}/chats/users`, options)
+      .delete(`/chats/users`, options)
       .then((data: any) => data.response);
   }
 
@@ -70,8 +60,8 @@ class ChatAPI extends Base {
     };
 
     return chatAPIInstance
-      .post(`${host}/user/search`, options)
-      .then((data: any) => JSON.parse(data.response));
+      .post(`/user/search`, options)
+      .then((data: string) => data);
   }
 
   createChat(chatData: CreateChatArgs) {
@@ -80,8 +70,8 @@ class ChatAPI extends Base {
     };
 
     return chatAPIInstance
-      .post(`${host}/chats`, options)
-      .then((data: any) => JSON.parse(data.response));
+      .post(`/chats`, options)
+      .then((data: unknown) => data);
   }
 
   deleteChat(id: number) {
@@ -92,8 +82,8 @@ class ChatAPI extends Base {
     };
 
     return chatAPIInstance
-      .delete(`${host}/chats`, options)
-      .then((data: any) => JSON.parse(data.response));
+      .delete(`/chats`, options)
+      .then((data: string) => data);
   }
 
   request() {

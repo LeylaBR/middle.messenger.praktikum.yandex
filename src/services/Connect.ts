@@ -5,6 +5,7 @@ export function connect(
   Component: any,
   mapStateToProps: (state: object) => object
 ) {
+    //@ts-ignore
   return class extends Component {
     constructor(tagName: string, props: any) {
       let state = mapStateToProps(store.getState());
@@ -15,6 +16,7 @@ export function connect(
         const newState = mapStateToProps(store.getState());
 
         if (!isEqual(state, newState)) {
+            //@ts-ignore
           this.setProps({ ...newState });
         }
 

@@ -77,7 +77,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
           info: info ? info.content : '',
           id,
           events: {
-            click: async (event: any) => {
+            click: async (event: MouseEvent) => {
               event.preventDefault();
               this.myId = this.props.user.id;
               const token: any = this.props.tokens[id];
@@ -92,17 +92,23 @@ class ChatWindows extends Block<ChatWindowsProps> {
                     content: 0,
                   });
 
-                  this.socket.on(WSTransport.EVENTS.MESSAGE, (mess: any) => {
-                    this.renderMessages(this.myId, mess);
-                    settingsChatButtonHandler(id, name);
-                  });
+                  this.socket.on(
+                    WSTransport.EVENTS.MESSAGE,
+                    (mess: MessageInfo | MessageInfo[]) => {
+                      this.renderMessages(this.myId, mess);
+                      settingsChatButtonHandler(id, name);
+                    }
+                  );
                 }
               } catch (error: any) {
                 console.error('Error connecting to WebSocket:', error);
               }
 
               try {
-                if (event.target && event.target.id === 'deleteButton') {
+                if (
+                  event.target &&
+                  (event.target as HTMLDivElement).id === 'deleteButton'
+                ) {
                   const regApiController = new ChatController();
                   regApiChat.deleteChats(id);
                   regApiController.getChats().then((newChats: ChatInfo[]) => {
@@ -178,7 +184,10 @@ class ChatWindows extends Block<ChatWindowsProps> {
     });
   }
 
-  renderMessages(myId: number | null, listMessages: MessageInfo[]) {
+  renderMessages(
+    myId: number | null,
+    listMessages: MessageInfo | MessageInfo[]
+  ) {
     if (Array.isArray(listMessages)) {
       const messages = listMessages
         .map((message: MessageInfo) => this.getMessage(message, myId))

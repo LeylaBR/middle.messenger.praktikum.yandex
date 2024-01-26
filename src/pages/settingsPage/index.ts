@@ -35,7 +35,7 @@ const fileButton = new Button('button', {
   },
   label: 'Choose avatar',
   events: {
-    click: (event: any) => {
+    click: (event: Event) => {
       event.preventDefault();
       const input = document.createElement('input');
       const imgElement = document.getElementById(avatarId) as HTMLImageElement;

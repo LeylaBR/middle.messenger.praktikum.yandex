@@ -1,5 +1,5 @@
 import { validationForm } from './validation';
-import { emptyFieldText, incorrectValueText } from '../constants';
+import { emptyFieldText, errorFieldText } from '../constants';
 
 const addError = (el: HTMLInputElement, textError: string) => {
   const errorElement: HTMLElement = document.getElementById(
@@ -29,11 +29,11 @@ const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
     element.classList.add('errorValidation');
     return;
   }
-
+  console.log(element.name);
   if (value || !element.required) {
     const valid = validationForm(element.name, value);
     if (!valid) {
-      addError(element, incorrectValueText);
+      addError(element, errorFieldText[element.name]);
     } else {
       removeError(element);
     }

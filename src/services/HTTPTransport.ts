@@ -8,12 +8,16 @@ interface OptionsType {
 
 type OptionsArg = OptionsType | {};
 
+type HTTPMethod = <R>(url: string, options?: OptionsArg) => Promise<R>;
+
 const METHODS = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
+
+export const BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
 function queryStringify(data: Record<string, unknown>) {
   return Object.keys(data)
@@ -22,24 +26,34 @@ function queryStringify(data: Record<string, unknown>) {
 }
 
 class HTTPTransport {
-  get = (url: string, options: OptionsArg = {}) =>
+  parseResponse(response: XMLHttpRequest) {
+    let parsedData;
+
+    const isFile = response.getResponseHeader('Content-Type') === 'image/jpeg';
+
+    if (isFile || response.response === 'OK') {
+      parsedData = response;
+    } else {
+      parsedData = JSON.parse(response.response);
+    }
+
+    return parsedData;
+  }
+
+  get: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.GET });
 
-  put = (url: string, options: OptionsArg = {}) =>
+  put: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.PUT });
 
-  post = (url: string, options: OptionsArg = {}) =>
+  post: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.POST });
 
-  delete = (url: string, options: OptionsArg = {}) =>
+  delete: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.DELETE });
 
-  request = (
-    url: string,
-    options = { method: METHODS.GET },
-    timeout = 5000
-  ) => {
-    const { data, method, withCredentials = true }: any = options;
+  request = (url, options = { method: METHODS.GET }, timeout = 5000) => {
+    const { data, method, withCredentials = true }: unknown = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -47,9 +61,9 @@ class HTTPTransport {
       xhr.withCredentials = withCredentials;
 
       if (method === METHODS.GET && data) {
-        xhr.open(method, `${url}?${queryStringify(data)}`);
+        xhr.open(method, `${BASE_URL}${url}?${queryStringify(data)}`);
       } else {
-        xhr.open(method, url);
+        xhr.open(method, `${BASE_URL}${url}`);
       }
 
       if (method === METHODS.GET || !data) {
@@ -62,7 +76,8 @@ class HTTPTransport {
       }
 
       xhr.onload = () => {
-        resolve(xhr);
+        const parsedData = this.parseResponse(xhr);
+        resolve(parsedData);
       };
 
       xhr.timeout = timeout;
