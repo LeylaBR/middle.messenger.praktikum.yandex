@@ -1,11 +1,11 @@
 import { validationForm } from './validation';
 import { emptyFieldText, errorFieldText } from '../constants';
 
-const addError = (el: HTMLInputElement, textError: string) => {
+const addError = (el: HTMLInputElement, textError?: string) => {
   const errorElement: HTMLElement = document.getElementById(
     `error_${el.name}`
   ) as HTMLElement;
-  if (errorElement) {
+  if (errorElement && textError) {
     el.classList.add('errorValidation');
     errorElement.classList.remove('hide');
     errorElement.classList.add('error');
@@ -29,11 +29,12 @@ const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
     element.classList.add('errorValidation');
     return;
   }
-  console.log(element.name);
+
   if (value || !element.required) {
     const valid = validationForm(element.name, value);
-    if (!valid) {
-      addError(element, errorFieldText[element.name]);
+    if (!valid && element.name) {
+      const fieldName: string = element.name;
+      addError(element, errorFieldText[fieldName]);
     } else {
       removeError(element);
     }

@@ -20,7 +20,7 @@ class RegistrationAPI extends Base {
 
     return chatAPIInstance
       .post(`/auth/signup`, options)
-      .then((data: { id: number }) => data);
+      .then((data: any) => data);
   }
 
   request() {

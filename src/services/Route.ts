@@ -4,13 +4,13 @@ import Block from './Block';
 class Route {
   private _pathname: string;
 
-  readonly _blockClass: Block;
+  private _blockClass: Block;
 
   private _block: Block | null;
 
   private _props: { rootQuery: string };
 
-  readonly _params: Record<string, string>;
+  private _params: Record<string, string>;
 
   constructor(pathname: string, view: Block, props: { rootQuery: string }) {
     this._pathname = pathname;
@@ -34,8 +34,8 @@ class Route {
 
     routeParts.forEach((part, index) => {
       if (part.startsWith(':')) {
-        const paramName: string = part.slice(1);
-        const paramValue: string = pathParts[index];
+        const paramName: any = part.slice(1);
+        const paramValue: any = pathParts[index];
         this._params[paramName] = paramValue;
       }
     });

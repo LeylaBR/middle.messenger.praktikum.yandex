@@ -36,11 +36,11 @@ const loginButton = new Button('button', {
     click: (event: MouseEvent) => {
       event.preventDefault();
       const form = document.getElementById(formIds.auth) as HTMLElement;
-      const fieldData = submitForm(form);
+      const fieldData: any = submitForm(form);
 
       if (!isEmpty(fieldData)) {
         const regApi = new AuthAPI();
-        regApi.signin(fieldData).then((data) => {
+        regApi.signin(fieldData).then((data: any) => {
           if (data === 'OK') {
             localStorage.setItem('currentUser', 'true');
             window.location.href = routes.chat;

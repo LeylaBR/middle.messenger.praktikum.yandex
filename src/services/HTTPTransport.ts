@@ -1,14 +1,14 @@
 interface OptionsType {
   method: string;
-  headers: Record<string, unknown>;
-  data: unknown;
+  headers: Record<string, any>;
+  data: any;
   timeout?: number | string;
   withCredentials?: boolean;
 }
 
 type OptionsArg = OptionsType | {};
 
-type HTTPMethod = <R>(url: string, options?: OptionsArg) => Promise<R>;
+type HTTPMethod = (url: string, options?: OptionsArg) => any;
 
 const METHODS = {
   GET: 'GET',
@@ -19,14 +19,14 @@ const METHODS = {
 
 export const BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
-function queryStringify(data: Record<string, unknown>) {
+function queryStringify(data: Record<string, any>) {
   return Object.keys(data)
     .map((key) => `${key}=${data[key]}`)
     .join('&');
 }
 
 class HTTPTransport {
-  parseResponse(response: XMLHttpRequest) {
+  parseResponse(response: any) {
     let parsedData;
 
     const isFile = response.getResponseHeader('Content-Type') === 'image/jpeg';
@@ -52,8 +52,12 @@ class HTTPTransport {
   delete: HTTPMethod = (url, options) =>
     this.request(url, { ...options, method: METHODS.DELETE });
 
-  request = (url, options = { method: METHODS.GET }, timeout = 5000) => {
-    const { data, method, withCredentials = true }: unknown = options;
+  request: HTTPMethod = (
+    url,
+    options = { method: METHODS.GET },
+    timeout = 5000
+  ) => {
+    const { data, method, withCredentials = true }: any = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

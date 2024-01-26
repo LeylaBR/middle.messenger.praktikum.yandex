@@ -17,13 +17,13 @@ class AuthAPI extends Base {
 
     return chatAPIInstance
       .post(`/auth/signin`, options)
-      .then((response: unknown) => {
+      .then((response: any) => {
         if (response.status === 200) {
           return response.response;
         }
         throw new Error(response.reason);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         showError(error.message);
       });
   }
@@ -31,9 +31,7 @@ class AuthAPI extends Base {
   logout() {
     return chatAPIInstance
       .post(`/auth/logout`)
-      .then((data: { response: string }) => {
-        return data.response;
-      });
+      .then((data: any) => data.response);
   }
 
   request() {

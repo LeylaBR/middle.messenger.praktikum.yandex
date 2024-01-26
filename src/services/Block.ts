@@ -1,4 +1,4 @@
-import Handlebars, { Template } from 'handlebars';
+import Handlebars from 'handlebars';
 import { v4 as makeUUID } from 'uuid';
 import EventBus from './EventBus';
 
@@ -8,7 +8,7 @@ interface EventBusOptions {
   emit(event: string, ...args: unknown[]): void;
 }
 
-class Block<Props extends Record<string, unknown> = unknown> {
+class Block<Props extends Record<string, any> = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -20,7 +20,7 @@ class Block<Props extends Record<string, unknown> = unknown> {
 
   private _setUpdate: boolean = false;
 
-  readonly _id: string;
+  private _id: string;
 
   public children: Props;
 
@@ -28,7 +28,7 @@ class Block<Props extends Record<string, unknown> = unknown> {
 
   public props: Props;
 
-  public eventBus: unknown;
+  public eventBus: any;
 
   public meta: {
     tagName: string;
@@ -85,7 +85,7 @@ class Block<Props extends Record<string, unknown> = unknown> {
     }
   }
 
-  private _componentDidUpdate(oldProps: unknown, newProps: unknown) {
+  private _componentDidUpdate(oldProps: any, newProps: any) {
     const response: boolean = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
@@ -93,12 +93,12 @@ class Block<Props extends Record<string, unknown> = unknown> {
     }
   }
 
-  componentDidUpdate(oldProps: unknown, newProps: unknown) {
+  componentDidUpdate(oldProps: any, newProps: any) {
     console.log(oldProps, newProps);
     return true;
   }
 
-  setProps(nextProps: unknown) {
+  setProps(nextProps: any) {
     if (!nextProps) {
       return;
     }
@@ -123,13 +123,13 @@ class Block<Props extends Record<string, unknown> = unknown> {
     }
   }
 
-  private _makePropsProxy(props: unknown) {
+  private _makePropsProxy(props: any) {
     return new Proxy(props, {
-      get: (target, prop: unknown) => {
+      get: (target, prop: any) => {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target: unknown, prop: unknown, value: unknown) => {
+      set: (target: any, prop: any, value: any) => {
         if (target[prop] !== value) {
           target[prop] = value;
           this._setUpdate = true;
@@ -188,8 +188,8 @@ class Block<Props extends Record<string, unknown> = unknown> {
     return { children, props, lists };
   }
 
-  compile(template: Template, props: unknown): DocumentFragment {
-    const propsAndStubs: unknown = { ...props };
+  compile(template: any, props: any): DocumentFragment {
+    const propsAndStubs: any = { ...props };
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
@@ -206,8 +206,8 @@ class Block<Props extends Record<string, unknown> = unknown> {
     const compiledTemplate = Handlebars.compile(template);
     fragment.innerHTML = compiledTemplate(propsAndStubs);
 
-    Object.values(this.children).forEach((child: unknown) => {
-      const stub: unknown = fragment.content.querySelector(
+    Object.values(this.children).forEach((child: any) => {
+      const stub: any = fragment.content.querySelector(
         `[data-id="${child._id}"]`
       );
 
@@ -215,7 +215,7 @@ class Block<Props extends Record<string, unknown> = unknown> {
     });
 
     Object.entries(this.lists).forEach(([key, list]) => {
-      const stub: unknown = fragment.content.querySelector(
+      const stub: any = fragment.content.querySelector(
         `[data-id="__1_${key}"]`
       );
       if (!stub) {
@@ -225,7 +225,7 @@ class Block<Props extends Record<string, unknown> = unknown> {
         'template'
       ) as HTMLTemplateElement;
 
-      list.forEach((el: unknown | string) => {
+      list.forEach((el: any | string) => {
         if (el instanceof Block) {
           listContent.content.append(el.getContent() as HTMLElement);
         } else {

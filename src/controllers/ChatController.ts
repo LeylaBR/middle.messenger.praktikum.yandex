@@ -1,16 +1,15 @@
 import store from '../services/Store';
 import ChatAPI from '../api/ChatAPI';
 import SettingsAPI from '../api/SettingsAPI';
-import { TokenInfo, UserInfo } from '../api/types';
 
 const chatApi = new ChatAPI();
 const settingsApi = new SettingsAPI();
 
 class ChatController {
   public getChats() {
-    return chatApi.getChats().then((data: unknown) => {
-      data.forEach((el) => {
-        chatApi.getChatUsers(el.id).then((chat) => {
+    return chatApi.getChats().then((data: any) => {
+      data.forEach((el: any) => {
+        chatApi.getChatUsers(el.id).then((chat: any) => {
           chat.forEach((user: any) => {
             this.getUsersAvatar(user.id, user.avatar);
           });
@@ -33,20 +32,20 @@ class ChatController {
   }
 
   public async getToken(chatId: number) {
-    return chatApi.getToken(chatId).then((data: TokenInfo) => {
+    return chatApi.getToken(chatId).then((data: any) => {
       const { tokens } = store.getState();
       store.set(`tokens`, { ...tokens, [chatId]: data.token });
     });
   }
 
   public getChatUsers(id: number) {
-    chatApi.getChatUsers(id).then((data: UserInfo[]) => {
+    chatApi.getChatUsers(id).then((data: any) => {
       store.set('chatUsers', { data });
     });
   }
 
-  public uploadChatAvatar(avatarData: UserInfo[]) {
-    settingsApi.uploadChatAvatar(avatarData).then((data: string) => {
+  public uploadChatAvatar(avatarData: any) {
+    settingsApi.uploadChatAvatar(avatarData).then((data: any) => {
       store.set('chatAvatar', data);
     });
   }

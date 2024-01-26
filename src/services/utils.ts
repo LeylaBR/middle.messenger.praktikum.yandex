@@ -6,7 +6,7 @@ export const render = (query: string, block: string) => {
   return root;
 };
 
-export function isEmpty(value: unknown) {
+export function isEmpty(value: any) {
   if (typeof value === 'number') {
     return true;
   }
@@ -69,7 +69,7 @@ export function isEqual(a: object, b: object): boolean {
   return true;
 }
 
-function merge(target: unknown, source: unknown) {
+function merge(target: any, source: any) {
   const merged = { ...target };
 
   Object.keys(source).forEach((key) => {
@@ -85,7 +85,7 @@ function merge(target: unknown, source: unknown) {
   return merged;
 }
 
-export function set(object: unknown, path: string, value: unknown): unknown {
+export function set(object: any, path: string, value: any): any {
   if (typeof path !== 'string') {
     throw new Error('path must be string');
   }
@@ -95,17 +95,17 @@ export function set(object: unknown, path: string, value: unknown): unknown {
   }
 
   const keys = path.split('.');
-  let currentObject: unknown | {} = object;
+  let currentObject: any | {} = object;
 
   for (let i = 0; i < keys.length - 1; i += 1) {
-    const key: unknown = keys[i];
+    const key: any = keys[i];
     if (!currentObject[key] || !currentObject[key]) {
       currentObject[key] = {};
     }
     currentObject = currentObject[key];
   }
 
-  const lastKey: unknown = keys[keys.length - 1];
+  const lastKey: any = keys[keys.length - 1];
   currentObject[lastKey] = value;
 
   return merge({}, object);

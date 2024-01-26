@@ -231,7 +231,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
 
               regApi
                 .createChat(dataToServer)
-                .then((data) => {
+                .then((data: any) => {
                   if (data.id) {
                     createChatButton.classList.add('hide');
                     createChatButton.classList.remove('button');
@@ -242,7 +242,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
                     });
                   }
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                   console.error('Error:', error.message);
                 });
             }

@@ -23,7 +23,7 @@ export const setNewAvatar = (path: string, element: any) => {
   if (path && element) {
     const regApi = new SettingsAPI();
     try {
-      return regApi.getAvatarStatic(path).then((src) => {
+      return regApi.getAvatarStatic(path).then((src: string) => {
         if (src) {
           element.src = src;
         }
@@ -39,7 +39,7 @@ export const setAvatar = (path: string) => {
   if (path) {
     const regApi = new SettingsAPI();
     try {
-      return regApi.getAvatarStatic(path).then((src) => {
+      return regApi.getAvatarStatic(path).then((src: string) => {
         if (src) {
           return src;
         }

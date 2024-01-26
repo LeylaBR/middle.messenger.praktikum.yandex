@@ -45,7 +45,7 @@ class SettingsChatPage extends Block<SettingsChatProps> {
         (chat: any) => chat.id === this.chatId
       );
 
-      setAvatar(currentChat?.avatar).then((ava) => {
+      setAvatar(currentChat?.avatar).then((ava: string) => {
         img.src = ava;
       });
     }
@@ -104,7 +104,7 @@ class SettingsChatPage extends Block<SettingsChatProps> {
                         users: [id],
                         chatId: this.chatId,
                       })
-                      .then((res) => {
+                      .then((res: any) => {
                         if (res === 'OK' && this.chatId) {
                           regApiChat.getChatUsers(this.chatId);
                         }

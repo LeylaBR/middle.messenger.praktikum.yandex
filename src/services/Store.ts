@@ -6,13 +6,13 @@ export enum StoreEvents {
 }
 
 class Store extends EventBus {
-  private state: unknown = {};
+  private state: any = {};
 
   public getState() {
     return this.state;
   }
 
-  public set(path: string, value: unknown) {
+  public set(path: string, value: any) {
     set(this.state, path, value);
     this.emit(StoreEvents.Updated);
   }

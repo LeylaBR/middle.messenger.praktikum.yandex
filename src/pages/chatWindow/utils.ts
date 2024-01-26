@@ -22,7 +22,7 @@ export const settingsChatButtonHandler = (id: number, name: string) => {
 export const setUsersAvatar = async (avatar: string, id: string) => {
   if (avatar) {
     try {
-      await setAvatar(avatar).then((data) => {
+      await setAvatar(avatar).then((data: any) => {
         const avatarElement = document.getElementById(id);
         if (avatarElement) {
           avatarElement.setAttribute('src', data);

@@ -54,12 +54,12 @@ const registrationButton = new Button('button', {
         const regApi = new RegistrationAPI();
         regApi
           .signup(body)
-          .then((data) => {
+          .then((data: any) => {
             if (data.id) {
               window.location.href = routes.chat;
             }
           })
-          .catch((error) => {
+          .catch((error: Error) => {
             console.error('Error:', error.message);
           });
       }

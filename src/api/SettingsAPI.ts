@@ -1,7 +1,6 @@
 import Base from './BaseAPI';
 import HTTP from '../services/HTTPTransport';
 import { showError } from './utils';
-import { UserInfo } from './types';
 
 const chatAPIInstance = new HTTP();
 
@@ -20,10 +19,10 @@ interface UpdatePasswordArg {
 }
 
 class SettingsAPI extends Base {
-  getAvatar(path: string, options: unknown) {
+  getAvatar(path: string, options: any) {
     return chatAPIInstance
       .put(`${path}`, options)
-      .then((response: unknown) => {
+      .then((response: any) => {
         if (response.status === 200) {
           return response.response;
         }
@@ -31,13 +30,13 @@ class SettingsAPI extends Base {
         throw new Error(response.status);
       })
       .then((data: string) => {
-        const res: unknown = data;
+        const res: any = data;
         if (res.avatar) {
           return this.getAvatarStatic(res.avatar);
         }
         throw new Error('Loading error');
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         if (error instanceof Error && error.message) {
           showError(error.message);
         } else {
@@ -53,7 +52,7 @@ class SettingsAPI extends Base {
     return this.getAvatar('/user/profile/avatar', options);
   }
 
-  uploadChatAvatar(avatarData: UserInfo[]) {
+  uploadChatAvatar(avatarData: any) {
     const options = {
       data: avatarData,
     };
@@ -64,9 +63,7 @@ class SettingsAPI extends Base {
   getAvatarStatic(path: string) {
     return chatAPIInstance
       .get(`/resources${path}`)
-      .then(
-        (responseData: { responseURL: string }) => responseData.responseURL
-      );
+      .then((responseData: any) => responseData.responseURL);
   }
 
   updateProfile(profileData: UpdateProfileArgs) {
@@ -75,7 +72,7 @@ class SettingsAPI extends Base {
     };
     return chatAPIInstance
       .put(`/user/profile`, options)
-      .then((responseData: { response: UserInfo }) => responseData.response);
+      .then((responseData: any) => responseData.response);
   }
 
   updatePassword(passwordData: UpdatePasswordArg) {
@@ -84,7 +81,7 @@ class SettingsAPI extends Base {
     };
     return chatAPIInstance
       .put(`/user/password`, options)
-      .then((responseData: { response: string }) => responseData.response);
+      .then((responseData: any) => responseData.response);
   }
 
   request() {

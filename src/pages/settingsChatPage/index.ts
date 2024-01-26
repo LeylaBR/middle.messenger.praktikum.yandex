@@ -36,11 +36,11 @@ const searchInput = new Input('div', {
         button.classList.add('button');
       }
 
-      regApi.searchUsers(value).then((res) => {
+      regApi.searchUsers(value).then((res: any) => {
         const fragment = document.createDocumentFragment();
         if (res.length) {
           res.forEach((el: any) => {
-            const option = document.createElement('option');
+            const option: any = document.createElement('option');
             option.value = el.id;
             option.textContent = el.first_name;
 
@@ -87,7 +87,7 @@ const newMemberButton = new Button('button', {
           users: [userId],
           chatId,
         };
-        regApi.addUser(data).then((res) => {
+        regApi.addUser(data).then((res: any) => {
           if (res === 'OK') {
             regApiChat.getChatUsers(chatId);
           }

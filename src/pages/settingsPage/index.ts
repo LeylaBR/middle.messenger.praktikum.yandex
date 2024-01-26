@@ -137,13 +137,13 @@ const logoutButton = new Button('button', {
       const regApi = new AuthAPI();
       regApi
         .logout()
-        .then((data) => {
+        .then((data: any) => {
           if (data === 'OK') {
             localStorage.removeItem('currentUser');
             window.location.href = routes.auth;
           }
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error('Error:', error.message);
         });
     },
