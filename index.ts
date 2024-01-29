@@ -17,6 +17,15 @@ const isValidPath: boolean = isRouteExists(
 );
 
 function redirectToLogin() {
+  if (
+    window.location.pathname !== routes.auth &&
+    window.location.pathname !== routes.registration
+  ) {
+    router.go(routes.auth);
+  }
+}
+
+function redirectToChat() {
   if (window.location.pathname === routes.auth) {
     router.go(routes.chat);
   }
@@ -35,6 +44,8 @@ if (isValidPath) {
   router.use(window.location.pathname, notFoundPage).start();
 }
 
-if (localStorage.getItem('currentUser')) {
+if (!localStorage.getItem('currentUser')) {
   redirectToLogin();
+} else {
+  redirectToChat();
 }

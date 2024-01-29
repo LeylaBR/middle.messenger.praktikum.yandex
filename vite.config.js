@@ -13,4 +13,7 @@ export default {
     port: 3000,
     open: true,
   },
+  optimizeDeps: {
+    dynamicImport: true,
+  },
 };

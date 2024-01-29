@@ -65,38 +65,6 @@ const searchSelect = new Select('div', {
   id: 'searchUser',
 });
 
-const newMemberButton = new Button('button', {
-  attr: {
-    class: 'hide',
-    id: 'addMemeber',
-  },
-  label: 'Add new memeber',
-  events: {
-    click: (event: MouseEvent) => {
-      event.preventDefault();
-      const regApiChat = new ChatController();
-      const regApi = new ChatAPI();
-
-      const pathParts = window.location.pathname.split('/');
-      const chatId = Number(pathParts[pathParts.length - 1]);
-      const select = document.getElementById('searchUser') as HTMLSelectElement;
-      const userId = Number(select.value);
-
-      if (userId && chatId) {
-        const data = {
-          users: [userId],
-          chatId,
-        };
-        regApi.addUser(data).then((res: any) => {
-          if (res === 'OK') {
-            regApiChat.getChatUsers(chatId);
-          }
-        });
-      }
-    },
-  },
-});
-
 const fileButton = new Button('button', {
   attr: {
     class: 'button',
@@ -158,7 +126,6 @@ const settingsChat = new SettingsChatPage('div', {
   searchInput,
   searchSelect,
   fileButton,
-  newMemberButton,
   backButton,
 });
 

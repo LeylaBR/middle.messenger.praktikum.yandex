@@ -85,16 +85,15 @@ class Block<Props extends Record<string, any> = any> {
     }
   }
 
-  private _componentDidUpdate(oldProps: any, newProps: any) {
-    const response: boolean = this.componentDidUpdate(oldProps, newProps);
+  private _componentDidUpdate() {
+    const response: boolean = this.componentDidUpdate();
 
     if (response) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
-    console.log(oldProps, newProps);
+  componentDidUpdate() {
     return true;
   }
 

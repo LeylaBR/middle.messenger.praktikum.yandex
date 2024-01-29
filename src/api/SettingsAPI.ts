@@ -23,18 +23,14 @@ class SettingsAPI extends Base {
     return chatAPIInstance
       .put(`${path}`, options)
       .then((response: any) => {
-        if (response.status === 200) {
-          return response.response;
+        if (response) {
+          return response;
         }
-
-        throw new Error(response.status);
+        throw new Error(response);
       })
       .then((data: string) => {
         const res: any = data;
-        if (res.avatar) {
-          return this.getAvatarStatic(res.avatar);
-        }
-        throw new Error('Loading error');
+        return this.getAvatarStatic(res.avatar);
       })
       .catch((error: Error) => {
         if (error instanceof Error && error.message) {
@@ -63,7 +59,15 @@ class SettingsAPI extends Base {
   getAvatarStatic(path: string) {
     return chatAPIInstance
       .get(`/resources${path}`)
-      .then((responseData: any) => responseData.responseURL);
+      .then((responseData: any) => {
+        if (responseData.responseURL) {
+          return responseData.responseURL;
+        }
+        throw new Error('not found url');
+      })
+      .catch((e: Error) => {
+        console.log(e);
+      });
   }
 
   updateProfile(profileData: UpdateProfileArgs) {

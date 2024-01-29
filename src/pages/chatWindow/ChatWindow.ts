@@ -40,6 +40,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
     super(tagName, props);
     this.getData();
     this.initSendButton();
+    this.initNewChatButton();
     this.chatAvatars = {};
     this.myId = null;
     this.socket = new WSTransport();
@@ -208,7 +209,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
         class: 'button',
       },
       label: 'Add new chat',
-      id: 'createChat',
+      id: 'createChatButton',
       events: {
         click: (event: MouseEvent) => {
           event.preventDefault();
@@ -258,7 +259,6 @@ class ChatWindows extends Block<ChatWindowsProps> {
     regApi.getUser();
     const chatData: any = await regApiChat.getChats();
     this.initChats(chatData);
-    this.initNewChatButton();
   }
 
   render() {

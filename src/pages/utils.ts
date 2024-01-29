@@ -43,11 +43,12 @@ export const setAvatar = (path: string) => {
         if (src) {
           return src;
         }
+
         throw new Error('Error fetching avatar');
       });
     } catch (error) {
       console.error('Error fetching avatar:', error);
     }
   }
-  throw new Error('Error fetching avatar');
+  return null;
 };

@@ -34,7 +34,11 @@ class HTTPTransport {
     if (isFile || response.response === 'OK') {
       parsedData = response;
     } else {
-      parsedData = JSON.parse(response.response);
+      try {
+        parsedData = JSON.parse(response.response);
+      } catch (e) {
+        parsedData = response;
+      }
     }
 
     return parsedData;

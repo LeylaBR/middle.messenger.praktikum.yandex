@@ -8,16 +8,19 @@ const settingsApi = new SettingsAPI();
 class ChatController {
   public getChats() {
     return chatApi.getChats().then((data: any) => {
-      data.forEach((el: any) => {
-        chatApi.getChatUsers(el.id).then((chat: any) => {
-          chat.forEach((user: any) => {
-            this.getUsersAvatar(user.id, user.avatar);
+      if (data.length) {
+        data.forEach((el: any) => {
+          chatApi.getChatUsers(el.id).then((chat: any) => {
+            chat.forEach((user: any) => {
+              this.getUsersAvatar(user.id, user.avatar);
+            });
           });
+          this.getToken(el.id);
         });
-        this.getToken(el.id);
-      });
-      store.set('chats', { data });
-      return data;
+        store.set('chats', { data });
+        return data;
+      }
+      return [];
     });
   }
 
@@ -39,8 +42,12 @@ class ChatController {
   }
 
   public getChatUsers(id: number) {
-    chatApi.getChatUsers(id).then((data: any) => {
-      store.set('chatUsers', { data });
+    return chatApi.getChatUsers(id).then((data: any) => {
+      if (data.length) {
+        store.set('chatUsers', { data });
+        return data;
+      }
+      return [];
     });
   }
 

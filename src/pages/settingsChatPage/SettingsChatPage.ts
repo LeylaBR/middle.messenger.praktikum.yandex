@@ -7,6 +7,7 @@ import UserItem from '../../components/userItem/UserItem';
 import { getAvatar, getAvatarPath, setAvatar } from '../utils';
 import ChatAPI from '../../api/ChatAPI';
 import { avatarId } from './constants';
+import { Button } from '../../components';
 
 interface SettingsChatProps extends TagNameComponent {
   props: any;
@@ -35,6 +36,7 @@ class SettingsChatPage extends Block<SettingsChatProps> {
     super(tagName, props);
     this.chatId = null;
     this.getData();
+    this.newMemberButton();
   }
 
   setChatAvatar() {
@@ -44,10 +46,11 @@ class SettingsChatPage extends Block<SettingsChatProps> {
       const currentChat = this.props.chats.data.find(
         (chat: any) => chat.id === this.chatId
       );
-
-      setAvatar(currentChat?.avatar).then((ava: string) => {
-        img.src = ava;
-      });
+      if (currentChat?.avatar) {
+        setAvatar(currentChat?.avatar).then((ava: string) => {
+          img.src = ava;
+        });
+      }
     }
   }
 
@@ -71,11 +74,9 @@ class SettingsChatPage extends Block<SettingsChatProps> {
   }
 
   async initUsers(data: any) {
-    const usersList = data ? data.data : [];
-
-    if (usersList.length) {
+    if (data.length) {
       const users = await Promise.all(
-        usersList.map(async (chat: Record<string, any>) => {
+        data.map(async (chat: Record<string, any>) => {
           const { first_name: name, last_message: info, id, avatar } = chat;
 
           const avatarPath = await this.setUsersAvatar(avatar);
@@ -95,7 +96,6 @@ class SettingsChatPage extends Block<SettingsChatProps> {
               click: (event: MouseEvent) => {
                 event.preventDefault();
                 const regApi = new ChatAPI();
-                const regApiChat = new ChatController();
 
                 if ((event.target as any).id === 'deleteButton') {
                   if (id && this.chatId) {
@@ -106,7 +106,7 @@ class SettingsChatPage extends Block<SettingsChatProps> {
                       })
                       .then((res: any) => {
                         if (res === 'OK' && this.chatId) {
-                          regApiChat.getChatUsers(this.chatId);
+                          this.getData();
                         }
                       });
                   }
@@ -117,21 +117,60 @@ class SettingsChatPage extends Block<SettingsChatProps> {
           return block;
         })
       );
-
       this.lists.userItems = users;
+      this.setProps({
+        userItems: users,
+      });
     }
   }
 
-  getData() {
+  newMemberButton() {
+    const addMemberButton = new Button('button', {
+      attr: {
+        class: 'hide',
+        id: 'addMemeber',
+      },
+      label: 'Add new memeber',
+      events: {
+        click: (event: MouseEvent) => {
+          event.preventDefault();
+          const regApi = new ChatAPI();
+
+          const pathParts = window.location.pathname.split('/');
+          const chatId = Number(pathParts[pathParts.length - 1]);
+          const select = document.getElementById(
+            'searchUser'
+          ) as HTMLSelectElement;
+          const userId = Number(select.value);
+
+          if (userId && chatId) {
+            const data = {
+              users: [userId],
+              chatId,
+            };
+            regApi.addUser(data).then((res: any) => {
+              if (res === 'OK') {
+                this.getData();
+              }
+            });
+          }
+        },
+      },
+    });
+
+    this.children.newMemberButton = addMemberButton;
+  }
+
+  async getData() {
     const regApiChat = new ChatController();
     this.getChatId();
     if (this.chatId) {
-      regApiChat.getChatUsers(this.chatId);
+      const users: any = await regApiChat.getChatUsers(this.chatId);
+      this.initUsers(users);
     }
   }
 
   render() {
-    this.initUsers(this.props.chatUsers);
     this.setChatAvatar();
     return this.compile(template, {
       ...this.props,
@@ -139,7 +178,6 @@ class SettingsChatPage extends Block<SettingsChatProps> {
       searchInput: this.props.searchInput,
       searchSelect: this.props.searchSelect,
       fileButton: this.props.fileButton,
-      newMemberButton: this.props.newMemberButton,
       backButton: this.props.backButton,
     });
   }
