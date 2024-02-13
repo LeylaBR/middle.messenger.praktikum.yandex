@@ -1,16 +1,7 @@
-import {
-  Avatar,
-  Button,
-  Input,
-  Layout,
-  Message,
-  UserItem,
-} from '../../components/index';
-
-import { messageData, userData } from './constants';
+import { Button, Input, Layout } from '../../components/index';
 import ChatWindows from './ChatWindow';
 import { formIds, routes } from '../../constants';
-import { submitForm } from '../../utils/form';
+import store from '../../services/Store';
 
 const profileButton = new Button('button', {
   attr: {
@@ -21,7 +12,11 @@ const profileButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      window.location.href = routes.settings;
+
+      const state = store.getState().user;
+      if (state) {
+        window.location.href = routes.settings;
+      }
     },
   },
 });
@@ -41,43 +36,6 @@ const searchInput = new Input('div', {
   },
 });
 
-const getAvatar = () =>
-  new Avatar('div', {
-    attr: {
-      class: 'imageUser',
-    },
-  });
-
-const userItems = userData.map((user) => {
-  const { name, info } = user;
-
-  const block = new UserItem('div', {
-    attr: {
-      class: 'usersContainer',
-    },
-    avatar: getAvatar(),
-    name,
-    info,
-  });
-
-  return block;
-});
-
-const messages = messageData.map((message) => {
-  const { className, left, right, name, text, time } = message;
-  const messageBlock = new Message('span', {
-    avatar: getAvatar(),
-    className,
-    left,
-    right,
-    name,
-    text,
-    time,
-  });
-
-  return messageBlock;
-});
-
 const messageInput = new Input('div', {
   attr: {
     class: 'inputMessage',
@@ -88,25 +46,6 @@ const messageInput = new Input('div', {
   id: 'message',
   value: '',
   name: 'message',
-  events: {
-    input: () => {
-      console.log('message');
-    },
-  },
-});
-
-const sendButton = new Button('button', {
-  attr: {
-    class: 'button',
-  },
-  label: 'Отправить',
-  events: {
-    click: (event: MouseEvent) => {
-      event.preventDefault();
-      const form: any = document.getElementById(formIds.message);
-      submitForm(form);
-    },
-  },
 });
 
 const chatWindow = new ChatWindows('div', {
@@ -115,10 +54,7 @@ const chatWindow = new ChatWindows('div', {
   },
   profileButton,
   searchInput,
-  userItems,
-  messages,
   messageInput,
-  sendButton,
   idForm: formIds.message,
 });
 

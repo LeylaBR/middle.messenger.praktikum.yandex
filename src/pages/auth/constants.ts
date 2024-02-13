@@ -5,7 +5,7 @@ export const authInputsData = [
     className: 'input',
     name: 'login',
     required: 'required',
-    value: '',
+    value: null,
   },
   {
     type: 'password',
@@ -13,6 +13,6 @@ export const authInputsData = [
     className: 'input',
     name: 'password',
     required: 'required',
-    value: '',
+    value: null,
   },
 ];

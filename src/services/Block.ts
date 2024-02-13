@@ -3,12 +3,12 @@ import { v4 as makeUUID } from 'uuid';
 import EventBus from './EventBus';
 
 interface EventBusOptions {
-  on(event: string, callback: (...args: any[]) => void): void;
-  off(event: string, callback: (...args: any[]) => void): void;
-  emit(event: string, ...args: any[]): void;
+  on(event: string, callback: (...args: unknown[]) => void): void;
+  off(event: string, callback: (...args: unknown[]) => void): void;
+  emit(event: string, ...args: unknown[]): void;
 }
 
-class Block<Props extends { [key: string]: any }> {
+class Block<Props extends Record<string, any> = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -35,7 +35,7 @@ class Block<Props extends { [key: string]: any }> {
     props: Props;
   };
 
-  constructor(tagName: string = 'div', propsAndChildren: Props | {} = {}) {
+  constructor(tagName: string = 'div', propsAndChildren: {} = {}) {
     const { children, lists, props } = this._getChildren(propsAndChildren);
 
     const eventBus = new EventBus();
@@ -45,9 +45,9 @@ class Block<Props extends { [key: string]: any }> {
       props,
     };
     this._id = makeUUID();
-    this.children = this._makePropsProxy(children);
-    this.lists = this._makePropsProxy(lists);
-    this.props = this._makePropsProxy({ ...props, __id: this._id });
+    this.children = this._makePropsProxy(children) as any;
+    this.lists = this._makePropsProxy(lists) as any;
+    this.props = this._makePropsProxy({ ...props, __id: this._id }) as any;
 
     this.eventBus = () => eventBus;
 
@@ -56,16 +56,10 @@ class Block<Props extends { [key: string]: any }> {
   }
 
   private _registerEvents(eventBus: EventBusOptions) {
-    eventBus.on(Block.EVENTS.INIT, this.init.bind(this) as any);
-    eventBus.on(
-      Block.EVENTS.FLOW_CDM,
-      this._componentDidMount.bind(this) as any
-    );
-    eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this) as any);
-    eventBus.on(
-      Block.EVENTS.FLOW_CDU,
-      this._componentDidUpdate.bind(this) as any
-    );
+    eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
   private _createResources() {
@@ -91,16 +85,15 @@ class Block<Props extends { [key: string]: any }> {
     }
   }
 
-  private _componentDidUpdate(oldProps: any, newProps: any) {
-    const response: boolean = this.componentDidUpdate(oldProps, newProps);
+  private _componentDidUpdate() {
+    const response: boolean = this.componentDidUpdate();
 
     if (response) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
-    console.log(oldProps, newProps);
+  componentDidUpdate() {
     return true;
   }
 
@@ -108,7 +101,7 @@ class Block<Props extends { [key: string]: any }> {
     if (!nextProps) {
       return;
     }
-    const oldValue: any = { ...this.props };
+    const oldValue: unknown = { ...this.props };
     const { children, props, lists } = this._getChildren(nextProps);
 
     if (Object.values(this.children).length) {
@@ -131,11 +124,11 @@ class Block<Props extends { [key: string]: any }> {
 
   private _makePropsProxy(props: any) {
     return new Proxy(props, {
-      get: (target, prop) => {
+      get: (target, prop: any) => {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop, value) => {
+      set: (target: any, prop: any, value: any) => {
         if (target[prop] !== value) {
           target[prop] = value;
           this._setUpdate = true;
@@ -167,7 +160,7 @@ class Block<Props extends { [key: string]: any }> {
   render() {}
 
   addAttribute(props: any) {
-    const { attr = {} }: any = props;
+    const { attr = {} }: any | {} = props;
 
     Object.entries(attr).forEach(([key, value]) => {
       if (this._element) {
@@ -176,10 +169,10 @@ class Block<Props extends { [key: string]: any }> {
     });
   }
 
-  private _getChildren(propsAndChildren: any) {
-    const children: any = {};
-    const props: any = {};
-    const lists: any = {};
+  private _getChildren(propsAndChildren: any | {}) {
+    const children: any | {} = {};
+    const props: any | {} = {};
+    const lists: any | {} = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -201,8 +194,7 @@ class Block<Props extends { [key: string]: any }> {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    Object.entries(this.lists).forEach(([key, list]) => {
-      console.log(list);
+    Object.entries(this.lists).forEach(([key, _]) => {
       propsAndStubs[key] = `<div data-id="__1_${key}"></div>`;
     });
 

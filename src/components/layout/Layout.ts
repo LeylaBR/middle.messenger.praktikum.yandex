@@ -8,7 +8,7 @@ interface Props {
 
 interface LayoutProps extends TagNameComponent {
   props: Props;
-  children: any;
+  children: unknown[];
 }
 
 class Layout extends Block<LayoutProps> {

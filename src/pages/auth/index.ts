@@ -1,14 +1,14 @@
 import { Button, Input, Layout } from '../../components/index';
-
 import { authInputsData } from './constants';
-
 import Auth from './Auth';
 import { formIds, routes } from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
+import { isEmpty } from '../../services/utils';
+import AuthAPI from '../../api/AuthAPI';
 
 const authInputs = authInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
-  const input = new Input('div', {
+  return new Input('div', {
     attr: {
       class: 'inputContainer',
     },
@@ -25,8 +25,6 @@ const authInputs = authInputsData.map((inputData) => {
       },
     },
   });
-
-  return input;
 });
 
 const loginButton = new Button('button', {
@@ -37,10 +35,18 @@ const loginButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      const form: HTMLElement = document.getElementById(
-        formIds.auth
-      ) as HTMLElement;
-      submitForm(form);
+      const form = document.getElementById(formIds.auth) as HTMLElement;
+      const fieldData: any = submitForm(form);
+
+      if (!isEmpty(fieldData)) {
+        const regApi = new AuthAPI();
+        regApi.signin(fieldData).then((data: any) => {
+          if (data === 'OK') {
+            localStorage.setItem('currentUser', 'true');
+            window.location.href = routes.chat;
+          }
+        });
+      }
     },
   },
 });

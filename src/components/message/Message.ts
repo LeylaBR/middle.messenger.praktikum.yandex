@@ -13,7 +13,7 @@ interface Props {
 
 interface MessageProps extends TagNameComponent {
   props: Props;
-  avatar: any;
+  avatar: unknown;
 }
 
 class Message extends Block<MessageProps> {

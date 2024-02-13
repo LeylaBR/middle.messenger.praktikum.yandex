@@ -5,7 +5,7 @@ export const settingsInputsData = [
     className: 'input',
     name: 'email',
     required: 'required',
-    value: 'test@yandex.ru',
+    value: null,
   },
   {
     type: 'text',
@@ -13,7 +13,7 @@ export const settingsInputsData = [
     className: 'input',
     name: 'first_name',
     required: 'required',
-    value: 'Test',
+    value: null,
   },
   {
     type: 'text',
@@ -21,7 +21,7 @@ export const settingsInputsData = [
     className: 'input',
     name: 'second_name',
     required: 'required',
-    value: 'Testovich',
+    value: null,
   },
   {
     type: 'text',
@@ -29,7 +29,7 @@ export const settingsInputsData = [
     className: 'input',
     name: 'login',
     required: 'required',
-    value: 'Test',
+    value: null,
   },
   {
     type: 'tel',
@@ -37,29 +37,31 @@ export const settingsInputsData = [
     className: 'input',
     name: 'phone',
     required: 'required',
-    value: '+79995558832',
+    value: null,
   },
   {
     type: 'text',
     placeholder: 'Имя в чате',
     className: 'input',
     name: 'display_name',
-    required: 'required',
-    value: 'TestRock',
+
+    value: null,
   },
   {
     type: 'password',
     placeholder: 'Пароль',
     className: 'input',
     name: 'oldPassword',
-    required: 'required',
-    value: '5591hgj788',
+
+    value: null,
   },
   {
     type: 'password',
     placeholder: 'Новый пароль',
     className: 'input',
     name: 'newPassword',
-    value: '',
+    value: null,
   },
 ];
+
+export const avatarId = 'avatarProfile';

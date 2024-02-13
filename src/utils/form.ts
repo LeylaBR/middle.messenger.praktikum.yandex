@@ -1,11 +1,11 @@
 import { validationForm } from './validation';
-import { emptyFieldText, incorrectValueText } from '../constants';
+import { emptyFieldText, errorFieldText } from '../constants';
 
-const addError = (el: HTMLInputElement, textError: string) => {
+const addError = (el: HTMLInputElement, textError?: string) => {
   const errorElement: HTMLElement = document.getElementById(
     `error_${el.name}`
   ) as HTMLElement;
-  if (errorElement) {
+  if (errorElement && textError) {
     el.classList.add('errorValidation');
     errorElement.classList.remove('hide');
     errorElement.classList.add('error');
@@ -32,8 +32,9 @@ const fieldValidationCheck = (element: HTMLInputElement, value: string) => {
 
   if (value || !element.required) {
     const valid = validationForm(element.name, value);
-    if (!valid) {
-      addError(element, incorrectValueText);
+    if (!valid && element.name) {
+      const fieldName: string = element.name;
+      addError(element, errorFieldText[fieldName]);
     } else {
       removeError(element);
     }
@@ -57,18 +58,22 @@ export const inputEventListeners = (element: HTMLInputElement) => {
 
 export const submitForm = (form: HTMLElement) => {
   const inputs = form.querySelectorAll('input');
+  let errors: NodeListOf<Element> | [] = [];
 
   let formData: any = {};
 
   inputs.forEach((input) => {
     let element: HTMLInputElement = input;
-
+    const errorsList = form.querySelectorAll('.error');
+    errors = errorsList;
     fieldValidationCheck(element, element.value);
-    const errors = form.querySelectorAll('.error');
-    if (!errors.length && element) {
+
+    if (!errors.length && element && !!element.name) {
       formData[element.name] = element.value;
     }
   });
-
-  console.log(formData);
+  if (!errors.length) {
+    return formData;
+  }
+  return {};
 };

@@ -3,6 +3,8 @@ import { registrationInputsData } from './constants';
 import Registration from './Registation';
 import { inputEventListeners, submitForm } from '../../utils/form';
 import { formIds, routes } from '../../constants';
+import RegistrationAPI from '../../api/RegistrationAPI';
+import { isEmpty } from '../../services/utils';
 
 const registrationInputs = registrationInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
@@ -47,7 +49,20 @@ const registrationButton = new Button('button', {
     click: (event: MouseEvent) => {
       event.preventDefault();
       const form: any = document.getElementById(formIds.registration);
-      submitForm(form);
+      const body = submitForm(form);
+      if (!isEmpty(body)) {
+        const regApi = new RegistrationAPI();
+        regApi
+          .signup(body)
+          .then((data: any) => {
+            if (data.id) {
+              window.location.href = routes.chat;
+            }
+          })
+          .catch((error: Error) => {
+            console.error('Error:', error.message);
+          });
+      }
     },
   },
 });

@@ -29,3 +29,24 @@ li {
     width: 100%;
     height: 100vh;
 }
+
+
+.errorWindowShow, .errorWindowHide {
+    position: fixed;
+    bottom: 9px;
+    right: 7px;
+    color: red;
+    font-size: 17px;
+    padding: 1rem;
+    background-color: black;
+    border-radius: 10px;
+    transition: right 0.3s ease
+}
+
+.errorWindowShow {
+    right: 7px;
+}
+
+.errorWindowHide {
+    right: -1000px;
+}
