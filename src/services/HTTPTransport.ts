@@ -1,7 +1,7 @@
 interface OptionsType {
   method: string;
   headers: Record<string, any>;
-  data: any;
+  data?: any;
   timeout?: number | string;
   withCredentials?: boolean;
 }
@@ -45,8 +45,8 @@ class HTTPTransport {
   }
 
   get: HTTPMethod = (url, options) => {
-    const newUrl = options?.data
-      ? `${BASE_URL}${url}?${queryStringify(options.data)}`
+    const newUrl = options && (options as any).data
+      ? `${BASE_URL}${url}?${queryStringify((options as any).data)}`
       : `${BASE_URL}${url}`;
     return this.request(newUrl, {
       ...options,

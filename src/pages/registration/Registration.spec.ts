@@ -1,7 +1,7 @@
+import { expect } from 'chai';
 import { formIds } from '../../constants';
 import { loginButton, registrationButton, registrationInputs } from './index';
 import Registration from './Registation';
-import { expect } from 'chai';
 import { validationForm } from '../../utils/validation';
 
 describe('Registration Page', () => {

@@ -1,22 +1,13 @@
+import { expect } from 'chai';
 import Router from './Router';
 import Block from './Block';
-import { expect } from 'chai';
-
-interface Props {
-  tagName: string;
-  props: any;
-}
 
 describe('Router', () => {
   let router: Router;
-  let PageClass: typeof Block<Props>;
+  let PageClass: any;
 
   before(() => {
-    class Page extends Block<Props> {
-      constructor(tagName: string, props: Props) {
-        super(tagName, props);
-      }
-
+    class Page extends Block<any> {
       render(): string {
         return `<div>
                     <span id="test-text">{{text}}</span>
@@ -34,6 +25,8 @@ describe('Router', () => {
 
   it('Добавление роута', () => {
     router.use('/test', PageClass);
-    expect(router.getRoute('/test')).to.exist;
+    const newRouter = router.getRoute('/test');
+
+    expect(newRouter).to.exist;
   });
 });

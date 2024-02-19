@@ -23,10 +23,13 @@ describe('HTTP Transport', () => {
       },
     });
 
-    const expectedUrl = `${BASE_URL}/test?a=1&b=203`;
+    const expectedUrl: string = `${BASE_URL}/test?a=1&b=203`;
 
-    expect(requestStub.calledWithMatch(expectedUrl, { method: METHODS.GET })).to
-      .be.true;
+    const isCalledWithExpectedUrl = requestStub.calledWithMatch(expectedUrl, {
+      method: METHODS.GET,
+    });
+
+    expect(isCalledWithExpectedUrl).to.be.true;
   });
 
   it('Метод POST c FormData', async () => {
@@ -36,12 +39,15 @@ describe('HTTP Transport', () => {
 
     await http.post('/upload', { data: formData });
 
-    expect(
-      requestStub.calledWithMatch(`${BASE_URL}/upload`, {
+    const isCalledWithExpectedUrl = requestStub.calledWithMatch(
+      `${BASE_URL}/upload`,
+      {
         method: METHODS.POST,
         data: formData,
-      })
-    ).to.be.true;
+      }
+    );
+
+    expect(isCalledWithExpectedUrl).to.be.true;
   });
 
   it('Обработка ошибки таймаута', async () => {
@@ -49,7 +55,7 @@ describe('HTTP Transport', () => {
 
     try {
       await http.get('/timeout', { timeout: 1000 });
-    } catch (error) {
+    } catch (error: any) {
       expect(error.message).to.equal('Request timed out');
     }
   });
