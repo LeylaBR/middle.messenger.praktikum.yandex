@@ -6,7 +6,7 @@ import { formIds, routes } from '../../constants';
 import RegistrationAPI from '../../api/RegistrationAPI';
 import { isEmpty } from '../../services/utils';
 
-const registrationInputs = registrationInputsData.map((inputData) => {
+export const registrationInputs = registrationInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
   return new Input('div', {
     attr: {
@@ -27,7 +27,7 @@ const registrationInputs = registrationInputsData.map((inputData) => {
   });
 });
 
-const loginButton = new Button('button', {
+export const loginButton = new Button('button', {
   attr: {
     class: 'button',
   },
@@ -40,11 +40,12 @@ const loginButton = new Button('button', {
   },
 });
 
-const registrationButton = new Button('button', {
+export const registrationButton = new Button('button', {
   attr: {
     class: 'button',
   },
   label: 'Registration',
+  id: 'regButton',
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
