@@ -1,3 +1,10 @@
+import UserController from './controllers/UserController';
+import SettingsAPI from './api/SettingsAPI';
+import AuthAPI from './api/AuthAPI';
+import ChatController from './controllers/ChatController';
+import ChatAPI from './api/ChatAPI';
+import RegistrationAPI from './api/RegistrationAPI';
+
 export const formIds = {
   auth: 'authForm',
   registration: 'registrationForm',
@@ -35,3 +42,10 @@ export const routesList = [
   '/500',
   `/messenger/settings/:id`,
 ];
+
+export const regApiUser = new UserController();
+export const regApiSettings = new SettingsAPI();
+export const regApiAuth = new AuthAPI();
+export const regApiChat = new ChatController();
+export const regApiNewChat = new ChatAPI();
+export const regApiReg = new RegistrationAPI();

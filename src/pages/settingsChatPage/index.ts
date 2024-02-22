@@ -1,9 +1,7 @@
 import { getAvatar } from '../utils';
 import { Button, Input, Layout, Select } from '../../components';
 import SettingsChatPage from './SettingsChatPage';
-import { routes } from '../../constants';
-import ChatAPI from '../../api/ChatAPI';
-import ChatController from '../../controllers/ChatController';
+import { regApiChat, regApiNewChat, routes } from '../../constants';
 import { avatarId } from './constants';
 
 const searchInput = new Input('div', {
@@ -18,8 +16,6 @@ const searchInput = new Input('div', {
       const { value }: any = event.target;
       const select = document.getElementById('searchUser') as HTMLInputElement;
       const button = document.getElementById('addMemeber') as HTMLButtonElement;
-
-      const regApi = new ChatAPI();
 
       if (!value) {
         select.classList.add('hide');
@@ -36,7 +32,7 @@ const searchInput = new Input('div', {
         button.classList.add('button');
       }
 
-      regApi.searchUsers(value).then((res: any) => {
+      regApiNewChat.searchUsers(value).then((res: any) => {
         const fragment = document.createDocumentFragment();
         if (res.length) {
           res.forEach((el: any) => {
@@ -89,9 +85,7 @@ const fileButton = new Button('button', {
           formData.append('chatId', String(chatId));
 
           reader.onload = function handleFileLoad(ev: any) {
-            const regApi = new ChatController();
-
-            regApi.uploadChatAvatar(formData);
+            regApiChat.uploadChatAvatar(formData);
 
             imgElement.src = ev.target.result;
           };

@@ -2,8 +2,7 @@ import { Button, Input, Layout } from '../../components/index';
 import { registrationInputsData } from './constants';
 import Registration from './Registation';
 import { inputEventListeners, submitForm } from '../../utils/form';
-import { formIds, routes } from '../../constants';
-import RegistrationAPI from '../../api/RegistrationAPI';
+import { formIds, regApiReg, routes } from '../../constants';
 import { isEmpty } from '../../services/utils';
 
 export const registrationInputs = registrationInputsData.map((inputData) => {
@@ -52,8 +51,7 @@ export const registrationButton = new Button('button', {
       const form: any = document.getElementById(formIds.registration);
       const body = submitForm(form);
       if (!isEmpty(body)) {
-        const regApi = new RegistrationAPI();
-        regApi
+        regApiReg
           .signup(body)
           .then((data: any) => {
             if (data.id) {

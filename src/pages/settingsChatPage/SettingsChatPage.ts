@@ -2,12 +2,11 @@ import Block from '../../services';
 import { template } from './template';
 import { TagNameComponent } from '../../components/types';
 import { connect } from '../../services/Connect';
-import ChatController from '../../controllers/ChatController';
 import UserItem from '../../components/userItem/UserItem';
 import { getAvatar, getAvatarPath, setAvatar } from '../utils';
-import ChatAPI from '../../api/ChatAPI';
 import { avatarId } from './constants';
 import { Button } from '../../components';
+import { regApiChat, regApiNewChat } from '../../constants';
 
 interface SettingsChatProps extends TagNameComponent {
   props: any;
@@ -95,11 +94,10 @@ class SettingsChatPage extends Block<SettingsChatProps> {
             events: {
               click: (event: MouseEvent) => {
                 event.preventDefault();
-                const regApi = new ChatAPI();
 
                 if ((event.target as any).id === 'deleteButton') {
                   if (id && this.chatId) {
-                    regApi
+                    regApiNewChat
                       .deleteUsers({
                         users: [id],
                         chatId: this.chatId,
@@ -134,7 +132,6 @@ class SettingsChatPage extends Block<SettingsChatProps> {
       events: {
         click: (event: MouseEvent) => {
           event.preventDefault();
-          const regApi = new ChatAPI();
 
           const pathParts = window.location.pathname.split('/');
           const chatId = Number(pathParts[pathParts.length - 1]);
@@ -148,7 +145,7 @@ class SettingsChatPage extends Block<SettingsChatProps> {
               users: [userId],
               chatId,
             };
-            regApi.addUser(data).then((res: any) => {
+            regApiNewChat.addUser(data).then((res: any) => {
               if (res === 'OK') {
                 this.getData();
               }
@@ -162,7 +159,6 @@ class SettingsChatPage extends Block<SettingsChatProps> {
   }
 
   async getData() {
-    const regApiChat = new ChatController();
     this.getChatId();
     if (this.chatId) {
       const users: any = await regApiChat.getChatUsers(this.chatId);
