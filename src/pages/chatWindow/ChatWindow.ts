@@ -1,12 +1,15 @@
 import Block from '../../services';
 import { template } from './template';
 import { connect } from '../../services/Connect';
-import UserController from '../../controllers/UserController';
-import ChatController from '../../controllers/ChatController';
 import { getAvatar, getAvatarPath } from '../utils';
 import WSTransport from '../../services/WebSocket';
 import { Button, Message, UserItem } from '../../components';
-import { formIds } from '../../constants';
+import {
+  formIds,
+  regApiChat,
+  regApiNewChat,
+  regApiUser,
+} from '../../constants';
 import { submitForm } from '../../utils/form';
 import {
   getTime,
@@ -15,9 +18,6 @@ import {
   setUsersAvatar,
 } from './utils';
 import { ChatInfo, ChatWindowsProps, MessageInfo } from './types';
-import ChatAPI from '../../api/ChatAPI';
-
-const regApiChat = new ChatController();
 
 function mapChatToProps(state: any) {
   return {
@@ -110,9 +110,8 @@ class ChatWindows extends Block<ChatWindowsProps> {
                   event.target &&
                   (event.target as HTMLDivElement).id === 'deleteButton'
                 ) {
-                  const regApiController = new ChatController();
                   regApiChat.deleteChats(id);
-                  regApiController.getChats().then((newChats: ChatInfo[]) => {
+                  regApiChat.getChats().then((newChats: ChatInfo[]) => {
                     this.initChats(newChats);
                   });
                 }
@@ -221,8 +220,6 @@ class ChatWindows extends Block<ChatWindowsProps> {
           createChatButton.classList.add('button');
           titleChatInput.classList.remove('hide');
           titleChatInput.classList.add('input');
-          const regApi = new ChatAPI();
-          const regApiController = new ChatController();
 
           createChatButton.addEventListener('click', () => {
             if (titleChatInput.value) {
@@ -230,7 +227,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
                 title: titleChatInput.value,
               };
 
-              regApi
+              regApiNewChat
                 .createChat(dataToServer)
                 .then((data: any) => {
                   if (data.id) {
@@ -238,7 +235,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
                     createChatButton.classList.remove('button');
                     titleChatInput.classList.add('hide');
                     titleChatInput.classList.remove('input');
-                    regApiController.getChats().then((chats: ChatInfo[]) => {
+                    regApiChat.getChats().then((chats: ChatInfo[]) => {
                       this.initChats(chats);
                     });
                   }
@@ -255,8 +252,7 @@ class ChatWindows extends Block<ChatWindowsProps> {
   }
 
   async getData() {
-    const regApi = new UserController();
-    regApi.getUser();
+    regApiUser.getUser();
     const chatData: any = await regApiChat.getChats();
     this.initChats(chatData);
   }

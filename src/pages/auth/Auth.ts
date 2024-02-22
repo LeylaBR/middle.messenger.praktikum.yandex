@@ -1,7 +1,7 @@
 import Block from '../../services';
 import { template } from './template';
 import { AttrProps, TagNameComponent } from '../../components/types';
-import AuthAPI from '../../api/AuthAPI';
+import { regApiAuth } from '../../constants';
 
 interface Props {
   attr: AttrProps;
@@ -23,8 +23,7 @@ class Auth extends Block<AuthProps> {
 
   userVerification() {
     if (!localStorage.getItem('currentUser')) {
-      const regApi = new AuthAPI();
-      regApi.logout();
+      regApiAuth.logout();
     }
   }
 

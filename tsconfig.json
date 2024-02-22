@@ -21,5 +21,10 @@
     "noUnusedParameters": true,
     "strict": true,
     "strictFunctionTypes": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
   }
 }

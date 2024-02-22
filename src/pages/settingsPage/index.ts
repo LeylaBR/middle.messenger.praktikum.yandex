@@ -1,11 +1,14 @@
 import { Button, Input, Layout } from '../../components/index';
 import { avatarId, settingsInputsData } from './constants';
 import SettingsPage from './SettingsPage';
-import { formIds, routes } from '../../constants';
+import {
+  formIds,
+  regApiAuth,
+  regApiSettings,
+  regApiUser,
+  routes,
+} from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
-import AuthAPI from '../../api/AuthAPI';
-import SettingsAPI from '../../api/SettingsAPI';
-import UserController from '../../controllers/UserController';
 import { getAvatar } from '../utils';
 
 const settingsInputs = settingsInputsData.map((inputData) => {
@@ -50,9 +53,7 @@ const fileButton = new Button('button', {
           formData.append('avatar', files[0]);
 
           reader.onload = function handleFileLoad(e: any) {
-            const regApi = new UserController();
-
-            regApi.uploadAvatar(formData);
+            regApiUser.uploadAvatar(formData);
 
             imgElement.src = e.target.result;
           };
@@ -79,7 +80,6 @@ const saveButton = new Button('button', {
       const formValue = {
         ...submitForm(form),
       };
-      const regApi = new SettingsAPI();
       const {
         first_name,
         second_name,
@@ -104,10 +104,10 @@ const saveButton = new Button('button', {
         newPassword,
       };
       if (formValue.oldPassword === '' && formValue && newPassword === '') {
-        regApi.updateProfile(dataProfile);
+        regApiSettings.updateProfile(dataProfile);
       } else {
-        regApi.updateProfile(dataProfile);
-        regApi.updatePassword(dataPassword);
+        regApiSettings.updateProfile(dataProfile);
+        regApiSettings.updatePassword(dataPassword);
       }
     },
   },
@@ -134,8 +134,7 @@ const logoutButton = new Button('button', {
   events: {
     click: (event: MouseEvent) => {
       event.preventDefault();
-      const regApi = new AuthAPI();
-      regApi
+      regApiAuth
         .logout()
         .then((data: any) => {
           if (data === 'OK') {

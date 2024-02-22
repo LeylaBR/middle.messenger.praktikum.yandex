@@ -1,5 +1,5 @@
 import { Avatar } from '../components';
-import SettingsAPI from '../api/SettingsAPI';
+import { regApiSettings } from '../constants';
 
 export const getAvatar = (id: number | string = 'avatar') =>
   new Avatar('div', {
@@ -21,9 +21,8 @@ export const getAvatarPath = (path: any, id: string | number) =>
 
 export const setNewAvatar = (path: string, element: any) => {
   if (path && element) {
-    const regApi = new SettingsAPI();
     try {
-      return regApi.getAvatarStatic(path).then((src: string) => {
+      return regApiSettings.getAvatarStatic(path).then((src: string) => {
         if (src) {
           element.src = src;
         }
@@ -37,9 +36,8 @@ export const setNewAvatar = (path: string, element: any) => {
 
 export const setAvatar = (path: string) => {
   if (path) {
-    const regApi = new SettingsAPI();
     try {
-      return regApi.getAvatarStatic(path).then((src: string) => {
+      return regApiSettings.getAvatarStatic(path).then((src: string) => {
         if (src) {
           return src;
         }

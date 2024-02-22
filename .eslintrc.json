@@ -7,6 +7,7 @@
   "plugins": ["@typescript-eslint"],
   "ignorePatterns": ["server.js", "vite.config.ts"],
   "rules": {
+    "@typescript-eslint/no-unused-expressions": "off",
     "@typescript-eslint/return-await": "off",
     "no-restricted-exports": 0,
     "import/no-import-module-exports": 0,

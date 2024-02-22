@@ -1,10 +1,9 @@
 import { Button, Input, Layout } from '../../components/index';
 import { authInputsData } from './constants';
 import Auth from './Auth';
-import { formIds, routes } from '../../constants';
+import { formIds, regApiAuth, routes } from '../../constants';
 import { inputEventListeners, submitForm } from '../../utils/form';
 import { isEmpty } from '../../services/utils';
-import AuthAPI from '../../api/AuthAPI';
 
 const authInputs = authInputsData.map((inputData) => {
   const { className, type, placeholder, name, value, required } = inputData;
@@ -39,8 +38,7 @@ const loginButton = new Button('button', {
       const fieldData: any = submitForm(form);
 
       if (!isEmpty(fieldData)) {
-        const regApi = new AuthAPI();
-        regApi.signin(fieldData).then((data: any) => {
+        regApiAuth.signin(fieldData).then((data: any) => {
           if (data === 'OK') {
             localStorage.setItem('currentUser', 'true');
             window.location.href = routes.chat;

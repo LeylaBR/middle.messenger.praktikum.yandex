@@ -1,7 +1,7 @@
 interface OptionsType {
   method: string;
   headers: Record<string, any>;
-  data: any;
+  data?: any;
   timeout?: number | string;
   withCredentials?: boolean;
 }
@@ -10,7 +10,7 @@ type OptionsArg = OptionsType | {};
 
 type HTTPMethod = (url: string, options?: OptionsArg) => any;
 
-const METHODS = {
+export const METHODS = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
@@ -44,17 +44,24 @@ class HTTPTransport {
     return parsedData;
   }
 
-  get: HTTPMethod = (url, options) =>
-    this.request(url, { ...options, method: METHODS.GET });
+  get: HTTPMethod = (url, options) => {
+    const newUrl = options && (options as any).data
+      ? `${BASE_URL}${url}?${queryStringify((options as any).data)}`
+      : `${BASE_URL}${url}`;
+    return this.request(newUrl, {
+      ...options,
+      method: METHODS.GET,
+    });
+  };
 
   put: HTTPMethod = (url, options) =>
-    this.request(url, { ...options, method: METHODS.PUT });
+    this.request(`${BASE_URL}${url}`, { ...options, method: METHODS.PUT });
 
   post: HTTPMethod = (url, options) =>
-    this.request(url, { ...options, method: METHODS.POST });
+    this.request(`${BASE_URL}${url}`, { ...options, method: METHODS.POST });
 
   delete: HTTPMethod = (url, options) =>
-    this.request(url, { ...options, method: METHODS.DELETE });
+    this.request(`${BASE_URL}${url}`, { ...options, method: METHODS.DELETE });
 
   request: HTTPMethod = (
     url,
@@ -69,9 +76,9 @@ class HTTPTransport {
       xhr.withCredentials = withCredentials;
 
       if (method === METHODS.GET && data) {
-        xhr.open(method, `${BASE_URL}${url}?${queryStringify(data)}`);
+        xhr.open(method, url);
       } else {
-        xhr.open(method, `${BASE_URL}${url}`);
+        xhr.open(method, url);
       }
 
       if (method === METHODS.GET || !data) {

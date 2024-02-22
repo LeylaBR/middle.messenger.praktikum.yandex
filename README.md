@@ -8,6 +8,7 @@
 - `npm run preview` — сборка предварительного просмотра.
 - `npm run lint` — проверка линтера.
 - `npm run format` — исправление ошибок.
+- `npm run test` — запуск тестирования.
 
   Ссылка на макет проекта в Figma https://www.figma.com/file/eV4gGIFC5SBGNm4lw9L6eq/Chat?type=design&node-id=0%3A1&mode=design&t=7SA5N8RdyMqjkKB2-1
 
